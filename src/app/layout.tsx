@@ -1,8 +1,11 @@
+"use client"
 import Header from '@/components/Header'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Footer from '@/components/Footer'
+import Image from 'next/image'
+import { FaArrowCircleUp, FaArrowUp } from 'react-icons/fa'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,9 +19,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
   return (
     <html lang="en">
-      <body className={`${inter.className} h-screen`}>
+      <body className={`${inter.className} w-full relative h-full`}>
+        <div className='fixed bottom-5 bg-white rounded-lg z-50 right-5 m-auto flex items-center'>
+          <Image src={"/whatsapp.png"} width={45} height={50} alt='whatsapp' />
+          <Image onClick={scrollToTop} src={"/arrow-up.png"} width={40} height={45} alt='whatsapp' />
+        </div>
         <Header />
         {children}
         <Footer />

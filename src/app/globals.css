@@ -7,6 +7,10 @@
     font-family: sans-serif;
   }
 
+  body {
+    background: #faf8f6;
+  }
+
   .wave {
     position: absolute;
     top: 0;
@@ -25,11 +29,6 @@
   }
 
   .wave .shape-fill {
-    fill: #ffffff;
-  }
-
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
+    fill: #faf8f6;
   }
 }

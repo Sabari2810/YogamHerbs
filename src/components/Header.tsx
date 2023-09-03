@@ -14,7 +14,7 @@ const Header = () => {
     const menuItems: IMenuItem[] = [
         {
             title: "Home",
-            path: "/home"
+            path: "/"
         },
         {
             title: "Products",
@@ -35,7 +35,7 @@ const Header = () => {
     ]
 
     return (
-        <div className='top-0 sticky flex items-center w-full justify-between px-12 h-16 bg-white shadow-sm shadow-slate-300'>
+        <div className='top-0 sticky z-50 flex items-center w-full justify-between px-12 h-16 bg-white shadow-sm shadow-slate-300'>
             {/* LEFT ACTIONS */}
             <div className='flex items-center min-w-[500px] justify-between'>
                 {/* LOGO */}

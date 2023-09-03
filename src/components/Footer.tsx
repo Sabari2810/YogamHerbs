@@ -1,4 +1,5 @@
 import React from 'react'
+import GetInTouch from './GetInTouch'
 
 const Footer = () => {
     return (
@@ -59,14 +60,7 @@ const Footer = () => {
                         </div>
                     </div>
                     {/* GET IN TOUCH */}
-                    <div>
-                        <h1 className='font-bold text-lg'>GET IN TOUCH</h1>
-                        <div className='flex flex-col space-y-2'>
-                            <input placeholder='Email' className='placeholder:text-sm px-4 border-[1px] border-slate-400 rounded-md h-10 outline-none' type="text" />
-                            <input placeholder='Type of query' className='placeholder:text-sm px-4 border-[1px] border-slate-400 rounded-md h-10 outline-none' type="text" />
-                            <input placeholder='Message' className='placeholder:text-sm px-4 border-[1px] border-slate-400 rounded-md h-10 outline-none' type="text" />
-                        </div>
-                    </div>
+                    <GetInTouch />
                 </div>
             </div>
             {/* COPY RIGHTS SECTION */}
