@@ -33,14 +33,14 @@ const ProductContainer = () => {
   }
 
   return (
-    <div onClick={() => {
-      router.push("/product/100");
-    }} className='bg-white space-y-3 relative rounded-2xl shadow-sm p-5 border-[1px]'>
+    <div className='bg-white space-y-3 relative rounded-2xl shadow-sm p-5 border-[1px]'>
       <div className='absolute top-2 left-2'>
         <Image alt='' width={50} height={10} src={product.banner_url} />
       </div>
       {/* PRODUCT IMAGE */}
-      <div className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
+      <div onClick={() => {
+        router.push("/product/100");
+      }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
         <Image width={400} height={100} alt='product-image' src={product.image_url} />
       </div>
       {/* PRODUCT DETAILS */}

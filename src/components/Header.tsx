@@ -30,7 +30,7 @@ const Header = () => {
         },
         {
             title: "Contact us",
-            path: "/contact-us"
+            path: "#getintouch"
         }
     ]
 
@@ -43,7 +43,7 @@ const Header = () => {
                 {/* MENU ITEMS */}
                 <div className='flex items-center space-x-4'>
                     {menuItems.map((menuItem) => (
-                        <Link href={menuItem.path} key={menuItem.title}>{menuItem.title}</Link>
+                        <Link scroll={true} href={menuItem.path} key={menuItem.title}>{menuItem.title}</Link>
                     ))}
                 </div>
             </div>

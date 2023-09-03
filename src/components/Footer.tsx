@@ -64,7 +64,8 @@ const Footer = () => {
                 </div>
             </div>
             {/* COPY RIGHTS SECTION */}
-            <div className='border-t-[0.2px] py-2 flex items-center justify-center border-slate-200'>
+            <hr className='opacity-30' />
+            <div className='py-2 flex items-center justify-center'>
                 Copyright Yogam Herbs
             </div>
             <div className="wave">

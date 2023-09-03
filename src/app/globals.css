@@ -7,6 +7,10 @@
     font-family: sans-serif;
   }
 
+  * {
+    scroll-behavior: smooth;
+  }
+
   body {
     background: #faf8f6;
   }
