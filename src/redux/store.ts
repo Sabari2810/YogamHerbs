@@ -1,9 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from "./features/counterSlice";
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
+import productsReducer from "./reducers/productsReducer";
 
 export const store = configureStore({
     reducer: {
-        counterReducer
+        productsReducer
     },
     devTools: process.env.NODE_ENV !== "production",
 })
@@ -12,3 +12,10 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+    ReturnType,
+    RootState,
+    unknown,
+    Action<string>
+>;

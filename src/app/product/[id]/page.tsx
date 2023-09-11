@@ -1,17 +1,24 @@
 "use client"
 import Button from '@/components/Button'
-import { IProduct } from '@/components/ProductContainer'
 import ProductRating from '@/components/Rating'
 import Image from 'next/image'
 import React from 'react'
 import { AiOutlineHeart, AiOutlineShareAlt } from 'react-icons/ai'
 import { FaArrowLeft, FaArrowRight, FaMinus, FaPlus } from 'react-icons/fa'
 import Carousel from 'react-multi-carousel'
-import "react-multi-carousel/lib/styles.css";
+import "react-multi-carousel/lib/styles.css"
 
+interface IProps {
+    params: {
+        id: string
+    }
+}
 
-const Page: React.FC<IProduct> = ({ title, image_url, description, discount_percent, discount_price }) => {
-    const product: IProduct = {
+const Page: React.FC<IProps> = ({ params }) => {
+
+    console.log('params.id', params.id)
+
+    const product = {
         image_url: "https://www.themancompany.com/cdn/shop/products/3_bc632f6c-4c83-43e4-a92c-14e19e04a77a_765x.jpg?v=1690190685",
         banner_url: "/best-seller.svg",
         title: "Lightening Lip Balm SPF15 | Vitamin E & Liquorice Oil",

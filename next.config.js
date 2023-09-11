@@ -4,7 +4,8 @@ const nextConfig = {
     //     serverActions: true
     // },
     images: {
-        domains: ["www.themancompany.com"]
+        domains: ["www.themancompany.com", "dsitestsa.blob.core.windows.net"],
+        formats: ['image/webp']
     }
 }
 

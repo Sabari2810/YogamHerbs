@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id              String           @id(map: "PK__Product__3213E83F69D97F51") @default(dbgenerated("newid()"), map: "DF__Product__id__4B7734FF") @db.UniqueIdentifier
+  title           String           @db.VarChar(250)
+  description     String           @db.VarChar(750)
+  category_id     String           @db.UniqueIdentifier
+  created_date    DateTime?        @default(dbgenerated("getutcdate()"), map: "DF__Product__created__4C6B5938") @db.DateTime
+  updated_date    DateTime?        @db.DateTime
+  ProductCategory ProductCategory  @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "FK__Product__categor__4D5F7D71")
+  ProductVariant  ProductVariant[]
+}
+
+model ProductCategory {
+  id           String    @id(map: "PK__ProductC__3213E83F8E57ABA6") @default(dbgenerated("newid()"), map: "DF__ProductCateg__id__42E1EEFE") @db.UniqueIdentifier
+  title        String    @db.VarChar(250)
+  created_date DateTime? @default(dbgenerated("getutcdate()"), map: "DF__ProductCa__creat__43D61337") @db.DateTime
+  updated_date DateTime? @db.DateTime
+  Product      Product[]
+}
+
+model ProductVariant {
+  id             String    @id(map: "PK__ProductV__3213E83FA46BBD07") @default(dbgenerated("newid()"), map: "DF__ProductVaria__id__59C55456") @db.UniqueIdentifier
+  title          String    @db.VarChar(250)
+  product_id     String    @db.UniqueIdentifier
+  price          Int
+  stock_quantity Int
+  created_date   DateTime  @default(dbgenerated("getutcdate()"), map: "DF__ProductVa__creat__5AB9788F") @db.DateTime
+  updated_date   DateTime? @db.DateTime
+  is_default     Boolean?
+  Product        Product   @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "FK__ProductVa__produ__5BAD9CC8")
+}

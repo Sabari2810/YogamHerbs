@@ -1,0 +1,1 @@
+export const noCache: RequestCache = "no-cache"

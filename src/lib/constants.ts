@@ -1,0 +1,1 @@
+export const GET_PRODUCTS_ENDPOINT = process.env.API_URL + "/api/products";
