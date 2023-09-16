@@ -85,7 +85,7 @@ const Page: React.FC<IProps> = ({ params }) => {
             >
                 {Array(10).fill(0).map((imageUrl, index) => {
                     return (
-                        <Image className='w-full p-2 pb-6' width={50} objectFit='contain' height={50} src={product.image_url} alt="movie" />
+                        <Image key={imageUrl} className='w-full p-2 pb-6' width={50} objectFit='contain' height={50} src={product.image_url} alt="movie" />
                     );
                 })}
             </Carousel>
@@ -127,7 +127,7 @@ const Page: React.FC<IProps> = ({ params }) => {
                     <div className='flex items-center space-x-2'>
                         {
                             product.variants.map((variant) => (
-                                <button className='px-4 py-1 border rounded border-slate-900'>{variant}</button>
+                                <button key={variant} className='px-4 py-1 border rounded border-slate-900'>{variant}</button>
                             ))
                         }
                     </div>
