@@ -1,4 +1,3 @@
-"use client"
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { Providers } from '@/redux/provider'
@@ -6,6 +5,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Image from 'next/image'
 import './globals.css'
+import WhatsappContainer from '@/components/WhatsappContainer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,17 +20,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
   return (
     <html lang="en">
       <body className={`${inter.className} w-full relative h-full`}>
-        <Providers><div className='fixed bottom-5 bg-white rounded-lg z-50 right-5 m-auto flex items-center'>
-          <Image src={"/whatsapp.png"} width={45} height={50} alt='whatsapp' />
-          <Image onClick={scrollToTop} src={"/arrow-up.png"} width={40} height={45} alt='whatsapp' />
-        </div>
+        <Providers>
+          <div className='fixed bottom-5 bg-white rounded-lg z-50 right-5 m-auto flex items-center'>
+            <WhatsappContainer />
+          </div>
           <Header />
           {children}
           <Footer />

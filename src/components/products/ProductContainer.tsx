@@ -29,7 +29,7 @@ const ProductContainer: React.FC<IProps> = ({ product }) => {
       <div onClick={() => {
         router.push(`/product/${product.id}`);
       }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
-        <Image key={product.id} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
+        <Image priority={true} key={product.id} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
           src={process.env.STORAGE_URL?.replace("{image_id}", product.ProductVariant[0].id.toUpperCase()) ?? ""} />
       </div>
       {/* PRODUCT DETAILS */}
