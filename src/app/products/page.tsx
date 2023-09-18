@@ -10,12 +10,14 @@ const products = async () => {
 
     // FETCH PRODUCT DETAILS
     const response: Response = await fetch(GET_PRODUCTS_ENDPOINT, {
-        // cache: noCache,
+        cache: noCache,
         next: {
             tags: ["products"]
         }
     });
     const products = await response.json() as IProduct[];
+
+    console.log('products', products)
 
     return (
         <div className='max-w-7xl py-10 mx-auto flex items-center justify-between'>
@@ -33,9 +35,12 @@ const products = async () => {
                 {/* PRODUCT LIST */}
                 <div className='w-full col-span-6 grid md:grid-cols-3 sm:grid-cols-2  gap-4'>
                     {
-                        products.map((product) => (
-                            <ProductContainer product={product} key={product.id} />
-                        ))
+                        products.map((product) => {
+
+                            return (
+                                <ProductContainer product={product} key={product.id} imageUrl={process.env.STORAGE_URL?.replace("{image_id}", product.ProductVariant[0].id.toUpperCase()) ?? ""} />
+                            )
+                        })
                     }
                 </div>
             </div>

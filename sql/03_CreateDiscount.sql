@@ -1,0 +1,11 @@
+CREATE TABLE yogam.discount
+(
+	id UNIQUEIDENTIFIER DEFAULT NEWID(),
+	created_date DATETIME DEFAULT GETUTCDATE(),
+	discount_type VARCHAR(10) NOT NULL,
+	code VARCHAR(20) NULL,
+	updated_date DATETIME NULL,
+	valid_upto DATETIME NOT NULL,
+	value INT NOT NULL,
+	PRIMARY KEY (id)
+)

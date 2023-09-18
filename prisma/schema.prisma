@@ -14,7 +14,9 @@ model Product {
   category_id     String           @db.UniqueIdentifier
   created_date    DateTime?        @default(dbgenerated("getutcdate()"), map: "DF__Product__created__4C6B5938") @db.DateTime
   updated_date    DateTime?        @db.DateTime
+  discount_id     String?          @db.UniqueIdentifier
   ProductCategory ProductCategory  @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "FK__Product__categor__4D5F7D71")
+  discount        discount?        @relation(fields: [discount_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_discount_id")
   ProductVariant  ProductVariant[]
 }
 
@@ -36,4 +38,15 @@ model ProductVariant {
   updated_date   DateTime? @db.DateTime
   is_default     Boolean?
   Product        Product   @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "FK__ProductVa__produ__5BAD9CC8")
+}
+
+model discount {
+  id            String    @id(map: "PK__discount__3213E83FE1A2BD9B") @default(dbgenerated("newid()"), map: "DF__discount__id__5E8A0973") @db.UniqueIdentifier
+  created_date  DateTime? @default(dbgenerated("getutcdate()"), map: "DF__discount__create__5F7E2DAC") @db.DateTime
+  discount_type String    @db.VarChar(10)
+  code          String?   @db.VarChar(20)
+  updated_date  DateTime? @db.DateTime
+  valid_upto    DateTime  @db.DateTime
+  value         Int
+  Product       Product[]
 }

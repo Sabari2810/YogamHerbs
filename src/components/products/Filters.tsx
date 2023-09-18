@@ -1,61 +1,63 @@
 "use client"
-import { randomUUID } from 'crypto';
-import React, { useState } from 'react'
-import { FaPlus } from 'react-icons/fa';
+import React from 'react'
 
 interface IFilter {
     title: string;
-    filters: string[]
+    filters: IFilterItem[]
+}
+
+interface IFilterItem {
+    title: string
+    value: string | number
 }
 
 const Filters = () => {
 
     const filters: IFilter[] = [{
-        title: "One",
-        filters: [
-            "One",
-            "Two",
-            "Three"
-        ]
+        title: "Category",
+        filters: [{
+            title: "One",
+            value: "one"
+        }]
     }, {
-        title: "Two",
-        filters: [
-            "One",
-            "Two",
-            "Three"
-        ]
+        title: "Price",
+        filters: [{
+            title: "Under 500",
+            value: 500
+        }]
     }]
 
-    const [activeCat, setActiveCat] = useState("");
+    const catFilter: string[] = [
+        "One",
+        "Two",
+        "Three"
+    ]
 
-
-
-    const toggleCurrentCat = (category: string) => {
-        setActiveCat((prevState) => {
-            if (prevState === category) {
-                return ""
-            }
-            return category
-        })
-    }
+    const priceFilter: string[] = [
+        "under 500",
+        "under 1000",
+        "under 1500"
+    ]
 
     return (
-        <div>
-            {filters.map((filter) => (
-                <div key={filter.title} >
-                    <div onClick={() => toggleCurrentCat(filter.title)} className='flex items-center space-x-10 justify-between'>
-                        <p className='text-sm font-semibold' >{filter.title}</p>
-                        <FaPlus />
-                    </div>
-                    {filter.title === activeCat &&
+        <div className='space-y-4'>
+            {
+                filters.map((filter) => {
+                    return (<div>
+                        <div className='flex pb-2 items-center space-x-10 justify-between'>
+                            <p className='text-sm font-semibold'>{filter.title}</p>
+                        </div>
                         <div >
                             {filter.filters.map((subFilter) => (
-                                <div key={subFilter.length} className='text-sm'>{subFilter}</div>
+                                <div className='flex items-center space-x-2'>
+                                    <input type="checkbox" />
+                                    <div key={subFilter.value.toString().length} className='text-sm'>{subFilter.title}</div>
+                                </div>
                             ))}
                         </div>
-                    }
-                </div>
-            ))}
+                    </div>)
+                })
+            }
         </div>
     )
 }

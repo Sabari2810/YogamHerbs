@@ -1,24 +1,23 @@
-'use client'
+"use client"
+import { IProduct } from '@/types/types'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { AiOutlineHeart } from 'react-icons/ai'
 import Button from '../Button'
-import { useRouter } from 'next/navigation'
-import { IProduct } from '@/types/types'
 
 interface IProps {
-  product: IProduct
+  product: IProduct,
+  imageUrl: string
 }
 
-const ProductContainer: React.FC<IProps> = ({ product }) => {
+const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
   const router = useRouter();
   const banner_url = "/best-seller.svg"
 
-  const getImageUrl = () => {
-    return
+  const getPrice = () => {
+    return product.discount_price ? product.discount_price : product.ProductVariant[0].price
   }
-
-  const url = getImageUrl();
 
   return (
     <div className='bg-white space-y-3 relative rounded-2xl shadow-sm p-5 border-[1px]'>
@@ -27,10 +26,10 @@ const ProductContainer: React.FC<IProps> = ({ product }) => {
       </div>
       {/* PRODUCT IMAGE */}
       <div onClick={() => {
-        router.push(`/product/${product.id}`);
+        router.push(`/product/${product.id}`)
       }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
         <Image priority={true} key={product.id} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
-          src={process.env.STORAGE_URL?.replace("{image_id}", product.ProductVariant[0].id.toUpperCase()) ?? ""} />
+          src={imageUrl} />
       </div>
       {/* PRODUCT DETAILS */}
       <div className='flex items-center justify-between'>
@@ -46,9 +45,9 @@ const ProductContainer: React.FC<IProps> = ({ product }) => {
       <div className='flex items-center justify-between'>
         {/* PRICING */}
         <div className='flex items-center space-x-2'>
-          <h1 className='font-semibold text-xl'>{product.ProductVariant[0].price}</h1>
-          <h1 className='font-semibold text-md text-slate-400 line-through'>{"500"}</h1>
-          <h1>{"50"}% OFF</h1>
+          <h1 className='font-semibold text-xl'>{getPrice()}</h1>
+          <h1 className='font-semibold text-md text-slate-400 line-through'>{product.ProductVariant[0].price}</h1>
+          <h1>{product.discount.value}% OFF</h1>
         </div>
         {/* RATING */}
         <div></div>
