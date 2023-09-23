@@ -27,31 +27,19 @@ const Filters = () => {
         }]
     }]
 
-    const catFilter: string[] = [
-        "One",
-        "Two",
-        "Three"
-    ]
-
-    const priceFilter: string[] = [
-        "under 500",
-        "under 1000",
-        "under 1500"
-    ]
-
     return (
         <div className='space-y-4'>
             {
                 filters.map((filter) => {
-                    return (<div>
+                    return (<div key={filter.title}>
                         <div className='flex pb-2 items-center space-x-10 justify-between'>
                             <p className='text-sm font-semibold'>{filter.title}</p>
                         </div>
                         <div >
                             {filter.filters.map((subFilter) => (
-                                <div className='flex items-center space-x-2'>
+                                <div key={subFilter.title} className='flex items-center space-x-2'>
                                     <input type="checkbox" />
-                                    <div key={subFilter.value.toString().length} className='text-sm'>{subFilter.title}</div>
+                                    <div className='text-sm'>{subFilter.title}</div>
                                 </div>
                             ))}
                         </div>

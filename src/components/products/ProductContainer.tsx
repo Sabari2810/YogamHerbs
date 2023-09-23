@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { AiOutlineHeart } from 'react-icons/ai'
 import Button from '../Button'
+import { CART_ENDPOINT } from '@/lib/constants'
+import { useDispatch } from 'react-redux'
+import { addCartItem } from '@/redux/features/cartSlice'
+import { IAddToCartRequestBody } from '@/types/apitypes'
 
 interface IProps {
   product: IProduct,
@@ -15,8 +19,22 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
   const router = useRouter();
   const banner_url = "/best-seller.svg"
 
+  const dispath = useDispatch();
+
+  const addToCart = async () => {
+    const response: Response = await fetch(CART_ENDPOINT, {
+      method: "POST",
+      body: JSON.stringify({
+        productVariantId: product.ProductVariant[0].id
+      } as IAddToCartRequestBody)
+    })
+    if (response.ok) {
+      dispath(addCartItem())
+    }
+  }
+
   const getPrice = () => {
-    return product.discount_price ? product.discount_price : product.ProductVariant[0].price
+    return product.discount ? product.discount_price : product.ProductVariant[0].price
   }
 
   return (
@@ -45,14 +63,20 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
       <div className='flex items-center justify-between'>
         {/* PRICING */}
         <div className='flex items-center space-x-2'>
-          <h1 className='font-semibold text-xl'>{getPrice()}</h1>
-          <h1 className='font-semibold text-md text-slate-400 line-through'>{product.ProductVariant[0].price}</h1>
-          <h1>{product.discount.value}% OFF</h1>
+          {/* PRODUCT PRICE AFTER DISCOUNT */}
+          <h1 className='font-semibold text-xl'>₹{getPrice()}</h1>
+          {product.discount &&
+            <>
+              {/* PRODUCT PRICE */}
+              <h1 className='font-semibold text-md text-slate-400 line-through'>{product.ProductVariant[0].price}</h1>
+              <h1>{product.discount.value}% OFF</h1>
+            </>
+          }
         </div>
         {/* RATING */}
         <div></div>
       </div>
-      <Button onClick={() => { }} label='Add to Cart' />
+      <Button onClick={addToCart} label='Add to Cart' />
     </div>
   )
 }

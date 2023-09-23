@@ -1,9 +1,10 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
 import productsReducer from "./reducers/productsReducer";
+import CartReducer from "./features/cartSlice";
 
 export const store = configureStore({
     reducer: {
-        productsReducer
+        CartReducer
     },
     devTools: process.env.NODE_ENV !== "production",
 })

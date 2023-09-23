@@ -34,5 +34,6 @@ export async function GET(req: NextRequest) {
         ...product,
         discount_price: (product.ProductVariant[0].price - (product.discount?.value! / 100) * product.ProductVariant[0].price).toFixed()
     }))
+
     return new Response(JSON.stringify(final_products));
 }

@@ -3,13 +3,15 @@ export interface IProduct {
     title: string;
     description: string;
     discount_price: number;
-    ProductVariant: [{
-        id: string,
-        price: string,
-        stock_quantity: string
-    }];
+    ProductVariant: IProductVariant[];
     discount: {
         value: string,
         discount_type: "offer" | "coupon"
     }
+}
+
+export interface IProductVariant {
+    id: string,
+    price: string,
+    stock_quantity: string
 }

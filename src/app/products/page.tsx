@@ -17,8 +17,6 @@ const products = async () => {
     });
     const products = await response.json() as IProduct[];
 
-    console.log('products', products)
-
     return (
         <div className='max-w-7xl py-10 mx-auto flex items-center justify-between'>
             {/* FILTER */}

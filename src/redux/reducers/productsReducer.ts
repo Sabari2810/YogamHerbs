@@ -1,7 +1,6 @@
 import { createAsyncThunk, createReducer } from "@reduxjs/toolkit"
 import { IProduct } from "@/types/types";
 import { RootState } from "../store";
-import { Exception } from "@prisma/client/runtime/library";
 
 interface State {
     products: IProduct[],
@@ -20,7 +19,6 @@ const initialState: State = {
 export const GetProducts = createAsyncThunk("GetProducts", async (obj, { rejectWithValue, fulfillWithValue }) => {
     try {
         const response: Response = await fetch(process.env.API_URL ?? "" + "/api/product");
-        throw new Error();
         if (response.ok) {
             const data = await response.json();
             return fulfillWithValue(data);
@@ -43,7 +41,5 @@ const productsReducer = createReducer(initialState, (builder) => {
             state.errorMessage = payload as string
         })
 })
-
-export const selectProducts = (state: RootState) => state.productsReducer;
 
 export default productsReducer

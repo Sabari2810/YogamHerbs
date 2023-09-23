@@ -37,6 +37,7 @@ model ProductVariant {
   created_date   DateTime  @default(dbgenerated("getutcdate()"), map: "DF__ProductVa__creat__5AB9788F") @db.DateTime
   updated_date   DateTime? @db.DateTime
   is_default     Boolean?
+  Cart           Cart[]
   Product        Product   @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "FK__ProductVa__produ__5BAD9CC8")
 }
 
@@ -49,4 +50,16 @@ model discount {
   valid_upto    DateTime  @db.DateTime
   value         Int
   Product       Product[]
+}
+
+model Cart {
+  id                 String         @id(map: "PK__Cart__3213E83FD3038D0A") @default(dbgenerated("newid()"), map: "DF__Cart__id__72910220") @db.UniqueIdentifier
+  session_id         String         @db.VarChar(150)
+  product_variant_id String         @db.UniqueIdentifier
+  quantity           Int            @db.SmallInt
+  created_date       DateTime?      @default(dbgenerated("getutcdate()"), map: "DF__Cart__created_da__73852659") @db.DateTime
+  updated_date       DateTime?      @db.DateTime
+  ProductVariant     ProductVariant @relation(fields: [product_variant_id], references: [id], onUpdate: NoAction, map: "FK__Cart__product_va__671F4F74")
+
+  @@unique([session_id, product_variant_id], map: "unq_Cart_product_variant_id_session_id")
 }

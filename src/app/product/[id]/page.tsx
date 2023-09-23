@@ -15,9 +15,6 @@ interface IProps {
 }
 
 const Page: React.FC<IProps> = ({ params }) => {
-
-    console.log('params.id', params.id)
-
     const product = {
         image_url: "https://www.themancompany.com/cdn/shop/products/3_bc632f6c-4c83-43e4-a92c-14e19e04a77a_765x.jpg?v=1690190685",
         banner_url: "/best-seller.svg",
