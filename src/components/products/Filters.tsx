@@ -1,4 +1,5 @@
 "use client"
+import { ICategory } from '@/types/types';
 import React from 'react'
 
 interface IFilter {
@@ -11,17 +12,24 @@ interface IFilterItem {
     value: string | number
 }
 
-const Filters = () => {
+interface IProps {
+    categories: ICategory[]
+}
+
+const Filters: React.FC<IProps> = ({ categories }) => {
 
     const filters: IFilter[] = [{
         title: "Category",
-        filters: [{
-            title: "One",
-            value: "one"
-        }]
+        filters: categories.map((category) => ({
+            ...category,
+            value: category.title
+        }))
     }, {
         title: "Price",
         filters: [{
+            title: "Under 100",
+            value: 100
+        }, {
             title: "Under 500",
             value: 500
         }]

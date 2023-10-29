@@ -20,10 +20,10 @@ const loading = () => {
                 {/* PRODUCT LIST */}
                 <div className='w-full col-span-6 grid md:grid-cols-3 sm:grid-cols-2 gap-4'>
                     {
-                        Array(6).fill(0).map((product) => {
+                        Array(6).fill(0).map((product, index) => {
 
                             return (
-                                <Skeleton height={250} />
+                                <Skeleton key={index} height={250} />
                             )
                         })
                     }

@@ -1,8 +1,8 @@
 import Filters from '@/components/products/Filters';
 import ProductContainer from '@/components/products/ProductContainer';
-import { GET_PRODUCTS_ENDPOINT } from '@/lib/constants';
+import { GET_CATEGORIES_ENDPOINT, GET_PRODUCTS_ENDPOINT } from '@/lib/constants';
 import { noCache } from '@/lib/utils';
-import { IProduct } from '@/types/types';
+import { ICategory, IProduct } from '@/types/types';
 import React from 'react'
 
 
@@ -15,7 +15,17 @@ const products = async () => {
             tags: ["products"]
         }
     });
+
+    // FETCH CATEGORIES
+    const categoryResponse: Response = await fetch(GET_CATEGORIES_ENDPOINT, {
+        cache: noCache,
+        next: {
+            tags: ["categories"]
+        }
+    });
+
     const products = await response.json() as IProduct[];
+    const categories = await categoryResponse.json() as ICategory[];
 
     return (
         <div className='max-w-7xl py-10 mx-auto flex items-center justify-between'>
@@ -26,7 +36,7 @@ const products = async () => {
                     {/* FILTER LIST */}
                     <hr className='py-3' />
                     <div className='space-y-2'>
-                        <Filters />
+                        <Filters categories={categories} />
                     </div>
                 </div>
 
@@ -34,9 +44,10 @@ const products = async () => {
                 <div className='w-full col-span-6 grid md:grid-cols-3 sm:grid-cols-2  gap-4'>
                     {
                         products.map((product) => {
-
                             return (
-                                <ProductContainer product={product} key={product.id} imageUrl={process.env.STORAGE_URL?.replace("{image_id}", product.ProductVariant[0].id.toUpperCase()) ?? ""} />
+                                <ProductContainer product={product} key={product.variant_guid}
+                                    imageUrl={process.env.NEXT_PUBLIC_STORAGE_URL?.replace("{image_id}",
+                                        product.variant_guid.toUpperCase()) ?? ""} />
                             )
                         })
                     }

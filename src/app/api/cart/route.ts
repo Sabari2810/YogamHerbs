@@ -1,29 +1,23 @@
 import { prisma } from "@/lib/prisma";
+import { getCartDetails } from "@/lib/services/cart";
 import { IAddToCartRequestBody } from "@/types/apitypes";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
     const sessionId = req.cookies.get("user");
+    if (sessionId === undefined) {
+        return Response.json({
+            status: 404
+        })
+    }
 
-    const data = await prisma.cart.findMany({
-        where: { session_id: sessionId?.value },
-        select: {
-            ProductVariant: {
-                select: {
-                    id: true,
-                }
-            },
-            quantity: true
-        }
-    })
+    const cartDetails = await getCartDetails(sessionId.value);
 
-    const quantity = data.reduce((total, cartItem) => total + cartItem.quantity, 0)
-
-    return new Response(JSON.stringify(quantity));
+    return new Response(JSON.stringify(cartDetails));
 }
 
 export async function POST(req: NextRequest) {
-    const { productVariantId }: IAddToCartRequestBody = await req.json();
+    const { productVariantId, action }: IAddToCartRequestBody = await req.json();
 
     const sessionId = req.cookies.get("user");
 
@@ -40,13 +34,13 @@ export async function POST(req: NextRequest) {
             },
             update: {
                 quantity: {
-                    increment: 1
-                }
+                    increment: action == "INCREMENT" ? 1 : -1
+                },
+                updated_date: new Date()
             },
             create: {
                 quantity: 1,
                 session_id: sessionId!.value,
-                updated_date: new Date(),
                 product_variant_id: productVariantId
             }
         })

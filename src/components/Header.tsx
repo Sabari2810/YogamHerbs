@@ -1,4 +1,4 @@
-import { selectCartValue, setCartItem } from '@/redux/features/cartSlice';
+import { selectCartValue, setCartCount } from '@/redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +7,8 @@ import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { useSelector } from 'react-redux';
 import { useEffect } from "react";
-import { CART_ENDPOINT } from '@/lib/constants';
+import { CART_COUNT_ENDPOINT, CART_ENDPOINT } from '@/lib/constants';
+import { useRouter } from 'next/router';
 
 interface IMenuItem {
     title: string;
@@ -19,16 +20,16 @@ const Header = () => {
     const dispatch = useAppDispatch();
 
     const getCartCount = async () => {
-        const response = await fetch(CART_ENDPOINT)
+        const response = await fetch(CART_COUNT_ENDPOINT)
         if (response.ok) {
             const count = await response.json();
-            dispatch(setCartItem(count))
+            dispatch(setCartCount(count))
         }
     }
 
     useEffect(() => {
         getCartCount()
-    }, [])
+    })
 
 
     const menuItems: IMenuItem[] = [
@@ -69,11 +70,11 @@ const Header = () => {
             </div>
             {/* RIGHT ACTIONS */}
             <div className='flex items-center space-x-4'>
-                <div className='relative'>
+                <Link href={"/cart"} className='relative'>
                     <AiOutlineShoppingCart size={25} />
                     <p className='absolute bg-red-600 text-xs flex items-center justify-center
                       text-white p-1 rounded-full h-5 w-5 -top-2 -right-3'>{cartCount}</p>
-                </div>
+                </Link>
                 <div className='h-6 border border-slate-500'></div>
                 <AiOutlineUser size={25} />
                 <div className='h-6 border border-slate-500'></div>

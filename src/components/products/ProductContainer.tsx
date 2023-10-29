@@ -9,6 +9,7 @@ import { CART_ENDPOINT } from '@/lib/constants'
 import { useDispatch } from 'react-redux'
 import { addCartItem } from '@/redux/features/cartSlice'
 import { IAddToCartRequestBody } from '@/types/apitypes'
+import ProductRating from '../Rating'
 
 interface IProps {
   product: IProduct,
@@ -19,22 +20,23 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
   const router = useRouter();
   const banner_url = "/best-seller.svg"
 
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
 
   const addToCart = async () => {
     const response: Response = await fetch(CART_ENDPOINT, {
       method: "POST",
       body: JSON.stringify({
-        productVariantId: product.ProductVariant[0].id
+        productVariantId: product.variant_id,
+        action: "INCREMENT"
       } as IAddToCartRequestBody)
     })
     if (response.ok) {
-      dispath(addCartItem())
+      dispatch(addCartItem())
     }
   }
 
   const getPrice = () => {
-    return product.discount ? product.discount_price : product.ProductVariant[0].price
+    return product.discount_price ?? product.price
   }
 
   return (
@@ -44,9 +46,9 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
       </div>
       {/* PRODUCT IMAGE */}
       <div onClick={() => {
-        router.push(`/product/${product.id}`)
+        router.push(`/product/${product.product_guid}`)
       }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
-        <Image priority={true} key={product.id} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
+        <Image priority={true} key={product.variant_guid} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
           src={imageUrl} />
       </div>
       {/* PRODUCT DETAILS */}
@@ -65,16 +67,16 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
         <div className='flex items-center space-x-2'>
           {/* PRODUCT PRICE AFTER DISCOUNT */}
           <h1 className='font-semibold text-xl'>₹{getPrice()}</h1>
-          {product.discount &&
+          {product.discount_id &&
             <>
               {/* PRODUCT PRICE */}
-              <h1 className='font-semibold text-md text-slate-400 line-through'>{product.ProductVariant[0].price}</h1>
-              <h1>{product.discount.value}% OFF</h1>
+              <h1 className='font-semibold text-md text-slate-400 line-through'>{product.price}</h1>
+              <h1>{product.discount_value}% OFF</h1>
             </>
           }
         </div>
         {/* RATING */}
-        <div></div>
+        <ProductRating rating={3.5} />
       </div>
       <Button onClick={addToCart} label='Add to Cart' />
     </div>

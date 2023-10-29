@@ -1,5 +1,6 @@
 export interface IAddToCartRequestBody {
-    productVariantId: string
+    productVariantId: number;
+    action: "INCREMENT" | "DECREMENT"
 }
 
 export interface IAddToCartResponseBody {
