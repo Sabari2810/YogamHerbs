@@ -2,25 +2,25 @@ CREATE OR ALTER PROCEDURE SP_GetProducts
 AS
 BEGIN
 	SELECT
-		m.id as product_id,
-		m.guid as product_guid,
-		v.id as variant_id,
-		v.guid as variant_guid, 
-		m.title, 
-		m.description, 
-		v.in_stocks, 
-		v.price,
-		(
+		m.Id as ProductId,
+		m.Guid as ProductGuid,
+		v.Id as VariantId,
+		v.Guid as VariantGuid, 
+		m.Title, 
+		m.Descr as Description, 
+		v.StockCount, 
+		v.Price,
+		CAST((
 			CASE 
-				WHEN d.discount_type IN ('c') THEN v.price - d.value
-				WHEN d.discount_type IN ('d') THEN v.price - ((d.value / 100) * v.price)
+				WHEN LOWER(d.DiscountType) IN ('c') THEN v.Price - d.Value
+				WHEN LOWER(d.DiscountType) IN ('d') THEN v.Price - ((d.Value / 100) * v.Price)
 				ELSE NULL
 			END
-		) as discount_price,
-		d.id as discount_id,
-		d.value as discount_value
-	FROM ProductMaster m
-	JOIN ProductVariants v ON m.id = v.product_id
-	LEFT JOIN DiscountMaster d ON v.discount_id = d.id AND d.eff_to > GETDATE()
-	WHERE v.id IS NOT NULL and v.is_default = 1
+		) AS NUMERIC(18,2)) as DiscountPrice,
+		d.Id as DiscountId,
+		d.Value as DiscountValue
+	FROM YH_ProductMaster m
+	JOIN YH_ProductVariants v ON m.Id = v.ProductId_FK
+	LEFT JOIN YH_DiscountMaster d ON d.Id = v.DiscountId_FK AND d.EffTo > GETDATE()
+	WHERE v.Id IS NOT NULL AND v.IsDefault = 1
 END

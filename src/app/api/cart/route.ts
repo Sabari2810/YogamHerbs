@@ -25,23 +25,23 @@ export async function POST(req: NextRequest) {
     // UPDATE THE QUANTITY BY ONE IF THE RECORD ALREADY EXIST
 
     try {
-        const cart = await prisma.cart.upsert({
+        const cart = await prisma.yH_Cart.upsert({
             where: {
-                session_id_product_variant_id: {
-                    session_id: sessionId!.value,
-                    product_variant_id: productVariantId,
+                SessionId_ProductVariantId_FK: {
+                    SessionId: sessionId!.value,
+                    ProductVariantId_FK: productVariantId,
                 }
             },
             update: {
-                quantity: {
+                Quantity: {
                     increment: action == "INCREMENT" ? 1 : -1
                 },
-                updated_date: new Date()
+                ModifiedDt: new Date()
             },
             create: {
-                quantity: 1,
-                session_id: sessionId!.value,
-                product_variant_id: productVariantId
+                Quantity: 1,
+                SessionId: sessionId!.value,
+                ProductVariantId_FK: productVariantId
             }
         })
     } catch (error) {

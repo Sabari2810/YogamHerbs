@@ -31,16 +31,16 @@ export const cart = createSlice({
             state.items = action.payload
         },
         updateCartItem: (state, action: PayloadAction<IUpdateCartItem>) => {
-            const currentItem = state.items.find((item) => item.product_variant_id === action.payload.product_variant_id);
+            const currentItem = state.items.find((item) => item.ProductVariantId === action.payload.product_variant_id);
             if (action.payload.action === "INCREMENT") {
-                currentItem!.quantity += 1;
+                currentItem!.Quantity += 1;
                 state.value += 1;
-                currentItem!.total_price = Number((currentItem!.total_price + currentItem!.price).toFixed(2))
+                currentItem!.TotalPrice = Number((currentItem!.TotalPrice + currentItem!.Price).toFixed(2))
             }
             else {
-                currentItem!.quantity -= 1;
+                currentItem!.Quantity -= 1;
                 state.value -= 1;
-                currentItem!.total_price = Number((currentItem!.total_price - currentItem!.price).toFixed(2))
+                currentItem!.TotalPrice = Number((currentItem!.TotalPrice - currentItem!.Price).toFixed(2))
             }
         }
     },

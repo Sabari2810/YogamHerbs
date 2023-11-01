@@ -1,7 +1,7 @@
 "use client"
 import Button from '@/components/Button'
 import ProductRating from '@/components/Rating'
-import { GET_PRODUCT_VARIANTS_ENDPOINT } from '@/lib/constants'
+import { CART_ENDPOINT, GET_PRODUCT_VARIANTS_ENDPOINT } from '@/lib/constants'
 import { decrementVariantQuantity, incrementVariantQuantity, selectCurrentVariant, selectCurrentVariantQuantity, selectVariants, setCurrentVariant, setProductVariants } from '@/redux/features/productSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { IProductVariant } from '@/types/types'
@@ -13,6 +13,8 @@ import Skeleton from 'react-loading-skeleton'
 import Carousel from 'react-multi-carousel'
 import "react-multi-carousel/lib/styles.css"
 import 'react-loading-skeleton/dist/skeleton.css'
+import { IAddToCartRequestBody } from '@/types/apitypes'
+import { addCartItem } from '@/redux/features/cartSlice'
 
 
 interface IProps {
@@ -38,6 +40,19 @@ const Page: React.FC<IProps> = ({ params }) => {
 
         getProductVariants()
     }, [])
+
+    const addToCart = async () => {
+        const response: Response = await fetch(CART_ENDPOINT, {
+            method: "POST",
+            body: JSON.stringify({
+                productVariantId: currentVariant?.ProductVariantId,
+                action: "INCREMENT"
+            } as IAddToCartRequestBody)
+        })
+        if (response.ok) {
+            dispatch(addCartItem())
+        }
+    }
 
     const CustomLeftArrow: React.FC = ({ onClick }: any) => {
         return (
@@ -116,32 +131,32 @@ const Page: React.FC<IProps> = ({ params }) => {
                         {/* HERO SECTION */}
                         {/* PRODUCT IMAGE */}
                         <div className='col-span-1'>
-                            <Image className='w-full object-cover h-96' width={700} height={450} alt='img'
+                            <Image className='w-full rounded-lg object-cover h-96' width={700} height={450} alt='img'
                                 src={process.env.NEXT_PUBLIC_STORAGE_URL?.replace("{image_id}",
-                                    currentVariant!.product_variant_guid.toUpperCase()) ?? ""} />
+                                    currentVariant!.ProductVariantGuid.toUpperCase()) ?? ""} />
                             {/* <ProductCarousel /> */}
                         </div>
                         {/* PRODUCT DETAILS */}
                         <div className='flex flex-col space-y-2'>
                             {/* TITLE SECTION */}
                             <div className='flex items-start space-x-2'>
-                                <h1 className='font-bold text-3xl'>{currentVariant.title}</h1>
+                                <h1 className='font-bold text-3xl'>{currentVariant.Title}</h1>
                                 <div className='flex items-center space-x-2'>
                                     <AiOutlineHeart size={35} />
                                     <AiOutlineShareAlt size={35} />
                                 </div>
                             </div>
                             {/* DESCRIPTION */}
-                            <h2 className='font-semibold text-slate-600 line-clamp-3 text-xl'>{currentVariant.description}</h2>
+                            <h2 className='font-semibold text-slate-600 line-clamp-3 text-xl'>{currentVariant.Description}</h2>
                             {/* RATING SECTION */}
                             <ProductRating rating={3.5} />
                             {/* PRICING SECTION */}
                             <div className='flex items-center space-x-2'>
-                                <h3 className='font-semibold text-2xl'>₹{currentVariant.price}</h3>
-                                {currentVariant.discount_price &&
+                                <h3 className='font-semibold text-2xl'>₹{currentVariant.DiscountPrice ?? currentVariant.Price}</h3>
+                                {currentVariant.DiscountPrice &&
                                     <>
-                                        <h4 className='font-semibold text-lg text-slate-400 line-through'>{currentVariant.discount_price}</h4>
-                                        <h4>{currentVariant.discount_value}% OFF</h4>
+                                        <h4 className='font-semibold text-lg text-slate-400 line-through'>{currentVariant.Price}</h4>
+                                        <h4>{currentVariant.DiscountValue}% OFF</h4>
                                     </>
                                 }
                             </div>
@@ -152,11 +167,11 @@ const Page: React.FC<IProps> = ({ params }) => {
                                         variants.map((variant) => (
                                             <button
                                                 onClick={() => dispatch(setCurrentVariant(variant))}
-                                                key={variant.product_variant_guid}
+                                                key={variant.ProductVariantGuid}
                                                 className={`px-2 py-1 
-                                                ${currentVariant.product_variant_guid === variant.product_variant_guid ? 'border-red-700 border-2 font-bold' : 'border-slate-900'} 
-                                                border rounded `}>{variant.volume}
-                                                <span className='text-xs'>{variant.unit.toLowerCase()}</span>
+                                                ${currentVariant.ProductVariantGuid === variant.ProductVariantGuid ? 'border-red-700 border-2 font-bold' : 'border-slate-900'} 
+                                                border rounded `}>{variant.Volume}
+                                                <span className='text-xs'>{variant.Unit.toLowerCase()}</span>
                                             </button>
                                         ))
                                     }
@@ -177,7 +192,7 @@ const Page: React.FC<IProps> = ({ params }) => {
                                 </div>
                             </div>
                             {/* ADD TO CART */}
-                            <Button className='py-4' onClick={() => { }} label='Add to Cart' />
+                            <Button className='py-4' onClick={async () => await addToCart()} label='Add to Cart' />
                             {/* ESTIMATED DELIVERY */}
                             <div className='flex flex-col space-y-2'>
                                 <div className='grid grid-cols-6 space-x-2'>

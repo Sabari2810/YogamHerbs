@@ -6,33 +6,33 @@ AS
 BEGIN
 	SELECT 
 		*,
-		(
+		CAST((
 			CASE
-				WHEN ISNULL(tbl.discount_price,0) <> 0 THEN CAST(tbl.discount_price * tbl.quantity AS NUMERIC(18,2))
-				ELSE tbl.price * tbl.quantity
+				WHEN ISNULL(tbl.DiscountPrice,0) <> 0 THEN CAST(tbl.DiscountPrice * tbl.quantity AS NUMERIC(18,2))
+				ELSE tbl.Price * tbl.quantity
 			END
-		) as total_price
+		) AS NUMERIC(18,2)) as TotalPrice
 	FROM
 	(SELECT 
-		m.title,
-		v.guid as product_variant_guid,
-		v.id as product_variant_id,
-		m.id as product_id,
-		m.guid as product_guid,
-		v.price,
-		(
+		m.Title,
+		v.guid as ProductVariantGuid,
+		v.id as ProductVariantId,
+		m.id as ProductId,
+		m.guid as ProductGuid,
+		v.Price,
+		CAST((
 			CASE
-				WHEN d.discount_type IN ('d') THEN v.price - ((d.value / 100) * v.price)
+				WHEN LOWER(d.DiscountType) IN ('d') THEN v.Price - ((d.Value / 100) * v.Price)
 				ELSE NULL
 			END
-		) as discount_price,
-		d.value as discount_value,
-		v.unit,
-		v.volume,
-		c.quantity
-	FROM Cart c
-	JOIN ProductVariants v ON c.product_variant_id = v.id
-	JOIN ProductMaster m ON m.id = v.product_id
-	LEFT JOIN DiscountMaster d ON d.id = v.discount_id
-	WHERE c.session_id = @session_id) AS tbl
+		) AS NUMERIC(18,2)) as DiscountPrice,
+		d.value as DiscountValue,
+		v.MeasurementUnit as Unit,
+		v.Volume,
+		c.Quantity
+	FROM YH_Cart c
+	JOIN YH_ProductVariants v ON c.ProductVariantId_FK = v.Id
+	JOIN YH_ProductMaster m ON m.Id = v.ProductId_FK
+	LEFT JOIN YH_DiscountMaster d ON d.Id = v.DiscountId_FK
+	WHERE c.SessionId = @session_id) AS tbl
 END

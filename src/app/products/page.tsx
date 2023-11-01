@@ -45,9 +45,9 @@ const products = async () => {
                     {
                         products.map((product) => {
                             return (
-                                <ProductContainer product={product} key={product.variant_guid}
+                                <ProductContainer product={product} key={product.VariantGuid}
                                     imageUrl={process.env.NEXT_PUBLIC_STORAGE_URL?.replace("{image_id}",
-                                        product.variant_guid.toUpperCase()) ?? ""} />
+                                        product.VariantGuid.toUpperCase()) ?? ""} />
                             )
                         })
                     }

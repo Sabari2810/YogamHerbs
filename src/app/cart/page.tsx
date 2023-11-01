@@ -49,22 +49,24 @@ const Cart = () => {
                     className='h-48 col-span-2 w-40 object-cover'
                     width={450}
                     height={450}
-                    src='https://dsitestsa.blob.core.windows.net/yogam/0A5A97B3-DB93-4103-9230-B46057B447FA.jpg'
+                    src={process.env.NEXT_PUBLIC_STORAGE_URL?.replace("{image_id}",
+                        item!.ProductVariantGuid.toUpperCase()) ?? ""}
                     alt=""
                 />
                 <div className='col-span-2'>
-                    <h2 className='font-semibold text-base'>{item.title}</h2>
+                    <h2 className='font-semibold text-base'>{item.Title}</h2>
                     <h3>
                         <span className='pr-1 text-slate-500'>
                             Volume :
                         </span>
-                        {item.volume + item.unit.toLowerCase()}
+                        {item.Volume + item.Unit.toLowerCase()}
                     </h3>
                     <h3>
                         <span className='pr-1 text-slate-500'>
                             Price :
                         </span>
-                        {item.discount_price ?? item.price}
+                        {item.DiscountPrice ?? item.Price}
+                        <span className='pl-1 line-through text-slate-400'>{item.Price}</span>
                     </h3>
                 </div>
                 <div className='col-span-2'>
@@ -73,18 +75,18 @@ const Cart = () => {
                         <div className='border rounded-full w-32 justify-between flex'>
                             <button onClick={async () => {
                                 await updateCartItemQuantity({
-                                    productVariantId: item.product_variant_id,
+                                    productVariantId: item.ProductVariantId,
                                     action: "DECREMENT"
                                 })
                             }} className='px-3 rounded-l-full py-1 bg-slate-300'>
                                 <FaMinus />
                             </button>
                             <p className='text-black py-1'>
-                                {item.quantity}
+                                {item.Quantity}
                             </p>
                             <button onClick={async () => {
                                 await updateCartItemQuantity({
-                                    productVariantId: item.product_variant_id,
+                                    productVariantId: item.ProductVariantId,
                                     action: "INCREMENT"
                                 })
                             }} className='px-3 rounded-r-full py-1 bg-slate-300'>
@@ -95,7 +97,7 @@ const Cart = () => {
                 </div>
                 <div className='col-span-2'>
                     <p>Total</p>
-                    <p>{item.total_price}</p>
+                    <p>{item.TotalPrice}</p>
                 </div>
             </div>
         )
@@ -114,7 +116,7 @@ const Cart = () => {
                     <div className='border py-4 rounded-xl border-slate-200 col-span-5 px-4 flex flex-col gap-4'>
                         {
                             cartItems.map((value) => (
-                                <CartProduct key={value.product_variant_guid} item={value} />
+                                <CartProduct key={value.ProductVariantGuid} item={value} />
                             ))
                         }
                     </div>

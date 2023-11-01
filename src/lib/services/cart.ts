@@ -11,17 +11,17 @@ export async function getCartDetails(sessionId: string) {
 }
 
 export async function getCartCount(sessionId: string) {
-    const productQuantity = await prisma.cart.findMany({
+    const productQuantity = await prisma.yH_Cart.findMany({
         where: {
-            session_id: sessionId
+            SessionId: sessionId
         },
         select: {
-            quantity: true
+            Quantity: true
         }
     })
 
     console.log(productQuantity)
 
-    const cartQuantity = productQuantity.reduce((total, cartItem) => total + cartItem.quantity, 0)
+    const cartQuantity = productQuantity.reduce((total, cartItem) => total + cartItem.Quantity, 0)
     return cartQuantity;
 }

@@ -4,12 +4,12 @@ import React from 'react'
 
 interface IFilter {
     title: string;
-    filters: IFilterItem[]
+    filterItems: IFilterItem[]
 }
 
 interface IFilterItem {
-    title: string
-    value: string | number
+    Title: string
+    Value: string | number
 }
 
 interface IProps {
@@ -20,18 +20,18 @@ const Filters: React.FC<IProps> = ({ categories }) => {
 
     const filters: IFilter[] = [{
         title: "Category",
-        filters: categories.map((category) => ({
+        filterItems: categories.map((category) => ({
             ...category,
-            value: category.title
+            Value: category.Title
         }))
     }, {
         title: "Price",
-        filters: [{
-            title: "Under 100",
-            value: 100
+        filterItems: [{
+            Title: "Under 100",
+            Value: 100
         }, {
-            title: "Under 500",
-            value: 500
+            Title: "Under 500",
+            Value: 500
         }]
     }]
 
@@ -44,10 +44,10 @@ const Filters: React.FC<IProps> = ({ categories }) => {
                             <p className='text-sm font-semibold'>{filter.title}</p>
                         </div>
                         <div >
-                            {filter.filters.map((subFilter) => (
-                                <div key={subFilter.title} className='flex items-center space-x-2'>
+                            {filter.filterItems.map((subFilter) => (
+                                <div key={subFilter.Title} className='flex items-center space-x-2'>
                                     <input type="checkbox" />
-                                    <div className='text-sm'>{subFilter.title}</div>
+                                    <div className='text-sm'>{subFilter.Title}</div>
                                 </div>
                             ))}
                         </div>

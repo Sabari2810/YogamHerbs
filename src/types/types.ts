@@ -1,50 +1,50 @@
 export interface IProduct {
-    product_id: number;
-    product_guid: string;
-    variant_id: number;
-    variant_guid: string;
-    title: string;
-    description: string;
-    discount_price: number;
-    discount_value: number;
-    discount_id: number;
-    price: number;
-    in_stocks: number;
+    ProductId: number;
+    ProductGuid: string;
+    VariantId: number;
+    VariantGuid: string;
+    Title: string;
+    Description: string;
+    DiscountPrice: number;
+    DiscountValue: number;
+    DiscountId: number;
+    Price: number;
+    StockCount: number;
 }
 
 export interface IProductVariant {
-    product_id: number;
-    product_guid: string;
-    product_variant_id: number;
-    product_variant_guid: string;
-    title: string;
-    description: string;
-    price: number;
-    discount_price: number;
-    discount_value: number;
-    unit: string;
-    volume: number;
-    is_default: boolean;
+    ProductId: number;
+    ProductGuid: string;
+    ProductVariantId: number;
+    ProductVariantGuid: string;
+    Title: string;
+    Description: string;
+    Price: number;
+    DiscountPrice: number;
+    DiscountValue: number;
+    Unit: string;
+    Volume: number;
+    IsDefault: boolean;
 }
 
 export interface ICategory {
-    guid: string,
-    title: string
+    Guid: string,
+    Title: string
 }
 
 export interface ICartItem {
-    title: string;
-    product_id: number;
-    product_guid: string;
-    product_variant_id: number;
-    product_variant_guid: string;
-    price: number;
-    discount_price: number;
-    discount_value: number;
-    unit: string;
-    volume: number;
-    quantity: number;
-    total_price: number;
+    Title: string;
+    ProductId: number;
+    ProductGuid: string;
+    ProductVariantId: number;
+    ProductVariantGuid: string;
+    Price: number;
+    DiscountPrice: number;
+    DiscountValue: number;
+    Unit: string;
+    Volume: number;
+    Quantity: number;
+    TotalPrice: number;
 }
 
 export interface IUpdateCartItem {

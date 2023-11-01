@@ -21,7 +21,7 @@ export const { actions, reducer } = createSlice({
         reset: () => initialState,
         setProductVariants: (state, action: PayloadAction<IProductVariant[]>) => {
             state.variants = action.payload;
-            state.currentVariant = state.variants.find((variant) => variant.is_default);
+            state.currentVariant = state.variants.find((variant) => variant.IsDefault);
             state.currentVariantQuantity = 0
         },
         setCurrentVariant: (state, action: PayloadAction<IProductVariant>) => {

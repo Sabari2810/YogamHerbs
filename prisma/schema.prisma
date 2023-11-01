@@ -14,32 +14,6 @@ model BuildVersion {
   ModifiedDate        DateTime @default(now(), map: "DF_BuildVersion_ModifiedDate") @db.DateTime
 }
 
-model CategoryMaster {
-  id                  Int                   @id(map: "PK__Category__3213E83F089423C5") @default(autoincrement())
-  guid                String?               @default(dbgenerated("newid()"), map: "DF__CategoryMa__guid__0C50D423") @db.UniqueIdentifier
-  title               String                @db.VarChar(150)
-  created_by          String                @db.Char(50)
-  modified_by         String?               @db.Char(50)
-  created_date        DateTime?             @default(dbgenerated("getutcdate()"), map: "DF__CategoryM__creat__0D44F85C") @db.DateTime
-  updated_date        DateTime?             @db.DateTime
-  ProductCategoryLink ProductCategoryLink[]
-}
-
-model DiscountMaster {
-  id              Int               @id(map: "PK__Discount__3213E83FF512042B") @default(autoincrement())
-  guid            String?           @default(dbgenerated("newid()"), map: "DF__DiscountMa__guid__10216507") @db.UniqueIdentifier
-  discount_type   String            @db.Char(1)
-  value           Int
-  eff_from        DateTime          @db.DateTime
-  eff_to          DateTime          @db.DateTime
-  used            Boolean?
-  created_by      String            @db.Char(50)
-  modified_by     String?           @db.Char(50)
-  created_date    DateTime?         @default(dbgenerated("getutcdate()"), map: "DF__DiscountM__creat__11158940") @db.DateTime
-  updated_date    DateTime?         @db.DateTime
-  ProductVariants ProductVariants[]
-}
-
 model ErrorLog {
   ErrorLogID     Int      @id(map: "PK_ErrorLog_ErrorLogID") @default(autoincrement())
   ErrorTime      DateTime @default(now(), map: "DF_ErrorLog_ErrorTime") @db.DateTime
@@ -52,88 +26,121 @@ model ErrorLog {
   ErrorMessage   String   @db.NVarChar(4000)
 }
 
-model ProductCategoryLink {
-  id             Int            @id(map: "PK__ProductC__3213E83F5C9C8C9E") @default(autoincrement())
-  guid           String?        @default(dbgenerated("newid()"), map: "DF__ProductCat__guid__13F1F5EB") @db.UniqueIdentifier
-  product_id     Int
-  category_id    Int
-  created_by     String         @db.Char(50)
-  modified_by    String?        @db.Char(50)
-  created_date   DateTime?      @default(dbgenerated("getutcdate()"), map: "DF__ProductCa__creat__14E61A24") @db.DateTime
-  updated_date   DateTime?      @db.DateTime
-  CategoryMaster CategoryMaster @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "FK__ProductCa__categ__16CE6296")
-  ProductMaster  ProductMaster  @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "FK__ProductCa__produ__15DA3E5D")
+model YH_CategoryMaster {
+  Id                     Int                      @id(map: "PK__YH_Categ__3214EC077A86C4D1") @default(autoincrement())
+  Guid                   String?                  @default(dbgenerated("newid()"), map: "DF__YH_Categor__Guid__43A1090D") @db.UniqueIdentifier
+  Title                  String                   @db.VarChar(150)
+  StatFlag               String                   @db.Char(1)
+  CreatedBy              String                   @db.VarChar(100)
+  CreatedDt              DateTime                 @default(now(), map: "DF__YH_Catego__Creat__44952D46") @db.DateTime
+  ModifiedBy             String?                  @db.VarChar(100)
+  ModifiedDt             DateTime?                @db.DateTime
+  YH_ProductCategoryLink YH_ProductCategoryLink[]
 }
 
-model ProductMaster {
-  id                  Int                   @id(map: "PK__ProductM__3213E83F19E24E8F") @default(autoincrement())
-  guid                String?               @default(dbgenerated("newid()"), map: "DF__ProductMas__guid__0880433F") @db.UniqueIdentifier
-  title               String                @db.VarChar(150)
-  description         String                @db.VarChar(500)
-  created_by          String                @db.Char(50)
-  modified_by         String?               @db.Char(50)
-  created_date        DateTime?             @default(dbgenerated("getutcdate()"), map: "DF__ProductMa__creat__09746778") @db.DateTime
-  updated_date        DateTime?             @db.DateTime
-  ProductCategoryLink ProductCategoryLink[]
-  ProductVariants     ProductVariants[]
+model YH_CustomerAddressMaster {
+  Id                Int               @id(map: "PK__YH_Custo__3214EC078BD5925B") @default(autoincrement())
+  Guid              String?           @default(dbgenerated("newid()"), map: "DF__YH_Custome__Guid__5F492382") @db.UniqueIdentifier
+  CustomerId_FK     Int
+  AddressTitle      String            @db.VarChar(100)
+  AddressType       String            @db.Char(1)
+  Address1          String            @db.VarChar(200)
+  Address2          String            @db.VarChar(200)
+  City              String            @db.VarChar(100)
+  State             String            @db.VarChar(100)
+  Pincode           Int
+  CreatedBy         String            @db.Char(50)
+  CreatedDt         DateTime          @default(now(), map: "DF__YH_Custom__Creat__61316BF4") @db.DateTime
+  ModifiedBy        String?           @db.Char(50)
+  ModifiedDt        DateTime?         @db.DateTime
+  YH_CustomerMaster YH_CustomerMaster @relation(fields: [CustomerId_FK], references: [Id], onUpdate: NoAction, map: "FK__YH_Custom__Custo__603D47BB")
 }
 
-model ProductVariants {
-  id             Int             @id(map: "PK__ProductV__3213E83F743160B1") @default(autoincrement())
-  product_id     Int
-  guid           String?         @default(dbgenerated("newid()"), map: "DF__ProductVar__guid__19AACF41") @db.UniqueIdentifier
-  description    String          @db.VarChar(500)
-  unit           String          @db.Char(10)
-  volume         Int
-  in_stocks      Int
-  price          Decimal         @db.Decimal(18, 2)
-  is_default     Boolean?
-  discount_id    Int?
-  created_by     String          @db.Char(50)
-  modified_by    String?         @db.Char(50)
-  created_date   DateTime?       @default(dbgenerated("getutcdate()"), map: "DF__ProductVa__creat__1A9EF37A") @db.DateTime
-  updated_date   DateTime?       @db.DateTime
-  Cart           Cart[]
-  DiscountMaster DiscountMaster? @relation(fields: [discount_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__ProductVa__disco__1C873BEC")
-  ProductMaster  ProductMaster   @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "FK__ProductVa__produ__1B9317B3")
+model YH_CustomerMaster {
+  Id                       Int                        @id(map: "PK__YH_Custo__3214EC079B66C8BC") @default(autoincrement())
+  Guid                     String?                    @default(dbgenerated("newid()"), map: "DF__YH_Custome__Guid__5B78929E") @db.UniqueIdentifier
+  FirstName                String                     @db.VarChar(50)
+  LastName                 String                     @db.VarChar(50)
+  EMail                    String                     @db.VarChar(150)
+  MobileNo                 String                     @db.VarChar(10)
+  SingInOpt                String?                    @db.VarChar(10)
+  CreatedBy                String                     @db.Char(50)
+  CreatedDt                DateTime                   @default(now(), map: "DF__YH_Custom__Creat__5C6CB6D7") @db.DateTime
+  ModifiedBy               String?                    @db.Char(50)
+  ModifiedDt               DateTime?                  @db.DateTime
+  YH_CustomerAddressMaster YH_CustomerAddressMaster[]
 }
 
-model Cart {
-  id                 Int             @id(map: "PK__Cart__3213E83FC7C17A61") @default(autoincrement())
-  guid               String?         @default(dbgenerated("newid()"), map: "DF__Cart__guid__39237A9A") @db.UniqueIdentifier
-  session_id         String          @db.VarChar(150)
-  product_variant_id Int
-  quantity           Int             @db.SmallInt
-  created_date       DateTime?       @default(dbgenerated("getutcdate()"), map: "DF__Cart__created_da__3A179ED3") @db.DateTime
-  updated_date       DateTime?       @db.DateTime
-  ProductVariants    ProductVariants @relation(fields: [product_variant_id], references: [id], onUpdate: NoAction, map: "FK__Cart__product_va__3B0BC30C")
-
-  @@unique([session_id, product_variant_id], map: "unq_Cart_product_variant_id_session_id")
+model YH_DiscountMaster {
+  Id                 Int                  @id(map: "PK__YH_Disco__3214EC07767E2ADF") @default(autoincrement())
+  Guid               String?              @default(dbgenerated("newid()"), map: "DF__YH_Discoun__Guid__4C364F0E") @db.UniqueIdentifier
+  DiscountType       String               @db.Char(1)
+  Value              Decimal              @db.Decimal(18, 2)
+  EffFrom            DateTime             @db.DateTime
+  EffTo              DateTime             @db.DateTime
+  Used               Boolean?
+  CreatedBy          String               @db.Char(50)
+  CreatedDt          DateTime             @default(now(), map: "DF__YH_Discou__Creat__4D2A7347") @db.DateTime
+  ModifiedBy         String?              @db.Char(50)
+  ModifiedDt         DateTime?            @db.DateTime
+  YH_ProductVariants YH_ProductVariants[]
 }
 
-model Customer {
-  id                     Int                      @id(map: "PK__Customer__3213E83F0C7C932F") @default(autoincrement())
-  guid                   String?                  @default(dbgenerated("newid()"), map: "DF__Customer__guid__2F9A1060") @db.UniqueIdentifier
-  first_name             String                   @db.VarChar(50)
-  last_name              String?                  @db.VarChar(50)
-  email                  String?                  @db.VarChar(150)
-  mobile_number          String                   @db.VarChar(10)
-  created_date           DateTime?                @default(dbgenerated("getutcdate()"), map: "DF__Customer__create__308E3499") @db.DateTime
-  updated_date           DateTime?                @db.DateTime
-  CustomerAddressDetails CustomerAddressDetails[]
+model YH_ProductCategoryLink {
+  Id                Int               @id(map: "PK__YH_Produ__3214EC07FA593267") @default(autoincrement())
+  ProductId_FK      Int
+  CategoryId_FK     Int
+  CreatedBy         String            @db.Char(50)
+  CreatedDt         DateTime          @default(now(), map: "DF__YH_Produc__Creat__4959E263") @db.DateTime
+  ModifiedBy        String?           @db.Char(50)
+  ModifiedDt        DateTime?         @db.DateTime
+  YH_CategoryMaster YH_CategoryMaster @relation(fields: [CategoryId_FK], references: [Id], onUpdate: NoAction, map: "FK__YH_Produc__Categ__4865BE2A")
+  YH_ProductMaster  YH_ProductMaster  @relation(fields: [ProductId_FK], references: [Id], onUpdate: NoAction, map: "FK__YH_Produc__Produ__477199F1")
 }
 
-model CustomerAddressDetails {
-  id           Int       @id(map: "PK__Customer__3213E83F5C3A5E7E") @default(autoincrement())
-  guid         String?   @default(dbgenerated("newid()"), map: "DF__CustomerAd__guid__336AA144") @db.UniqueIdentifier
-  customer_id  Int
-  address_name String    @db.VarChar(100)
-  address_1    String    @db.VarChar(200)
-  address_2    String    @db.VarChar(200)
-  city         String    @db.VarChar(100)
-  state        String    @db.VarChar(100)
-  pincode      Int
-  created_date DateTime? @default(dbgenerated("getutcdate()"), map: "DF__CustomerA__creat__345EC57D") @db.DateTime
-  updated_date DateTime? @db.DateTime
-  Customer     Customer  @relation(fields: [customer_id], references: [id], onUpdate: NoAction, map: "FK__CustomerA__custo__3552E9B6")
+model YH_ProductMaster {
+  Id                     Int                      @id(map: "PK__YH_Produ__3214EC07FF911787") @default(autoincrement())
+  Guid                   String?                  @default(dbgenerated("newid()"), map: "DF__YH_Product__Guid__3FD07829") @db.UniqueIdentifier
+  Title                  String                   @db.VarChar(150)
+  Descr                  String                   @db.VarChar(500)
+  StatFlag               String                   @db.Char(1)
+  CreatedBy              String                   @db.VarChar(100)
+  CreatedDt              DateTime                 @default(now(), map: "DF__YH_Produc__Creat__40C49C62") @db.DateTime
+  ModifiedBy             String?                  @db.VarChar(100)
+  ModifiedDt             DateTime?                @db.DateTime
+  YH_ProductCategoryLink YH_ProductCategoryLink[]
+  YH_ProductVariants     YH_ProductVariants[]
+}
+
+model YH_ProductVariants {
+  Id                Int               @id(map: "PK__YH_Produ__3214EC079BD68579") @default(autoincrement())
+  DiscountId_FK     Int
+  ProductId_FK      Int
+  Guid              String            @default(dbgenerated("newid()"), map: "DF__YH_Product__Guid__65F62111") @db.UniqueIdentifier
+  Descr             String            @db.VarChar(500)
+  MeasurementUnit   String            @db.Char(10)
+  Volume            Int
+  StockCount        Int
+  Price             Decimal           @db.Decimal(18, 2)
+  IsDefault         Boolean
+  CreatedBy         String            @db.Char(50)
+  CreatedDt         DateTime          @default(now(), map: "DF__YH_Produc__Creat__66EA454A") @db.DateTime
+  ModifiedBy        String?           @db.Char(50)
+  ModifiedDt        DateTime?         @db.DateTime
+  YH_Cart           YH_Cart[]
+  YH_DiscountMaster YH_DiscountMaster @relation(fields: [DiscountId_FK], references: [Id], onUpdate: NoAction, map: "FK__YH_Produc__Disco__55BFB948")
+  YH_ProductMaster  YH_ProductMaster  @relation(fields: [ProductId_FK], references: [Id], onUpdate: NoAction, map: "FK__YH_Produc__Produ__56B3DD81")
+}
+
+model YH_Cart {
+  Id                  Int                @id(map: "PK__YH_Cart__3214EC07E3A1F36F") @default(autoincrement())
+  Guid                String?            @default(dbgenerated("newid()"), map: "DF__YH_Cart__Guid__69C6B1F5") @db.UniqueIdentifier
+  SessionId           String             @db.VarChar(150)
+  ProductVariantId_FK Int
+  Quantity            Int                @db.SmallInt
+  CreatedDt           DateTime?          @default(dbgenerated("getutcdate()"), map: "DF__YH_Cart__Created__6ABAD62E") @db.DateTime
+  ModifiedDt          DateTime?          @db.DateTime
+  YH_ProductVariants  YH_ProductVariants @relation(fields: [ProductVariantId_FK], references: [Id], onUpdate: NoAction, map: "FK__YH_Cart__Product__6BAEFA67")
+
+  @@unique([SessionId, ProductVariantId_FK], map: "unq_Cart_product_variant_id_session_id")
 }

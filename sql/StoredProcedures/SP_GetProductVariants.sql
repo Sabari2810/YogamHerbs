@@ -5,25 +5,25 @@ CREATE OR ALTER PROCEDURE SP_GetProductVariants
 AS
 BEGIN
 	SELECT
-	m.id as product_id,
-	m.guid as product_guid,
-	v.id as product_variant_id,
-	v.guid as product_variant_guid,
-	m.title, 
-	m.description,
-	v.price,
-	(
+	m.Id as ProductId,
+	m.Guid as ProductGuid,
+	v.Id as ProductVariantId,
+	v.Guid as ProductVariantGuid,
+	m.Title, 
+	m.Descr as Description,
+	v.Price,
+	CAST((
 		CASE
-			WHEN d.discount_type IN ('d') THEN v.price - ((d.value / 100) * v.price)
+			WHEN LOWER(d.DiscountType) IN ('d') THEN v.Price - ((d.Value / 100) * v.Price)
 			ELSE NULL
 		END
-	) as discount_price,
-	d.value as discount_value,
-	v.unit,
-	v.volume,
-	v.is_default
-	FROM ProductMaster m
-	JOIN ProductVariants v ON m.id = v.product_id
-	LEFT JOIN DiscountMaster d ON d.id = v.discount_id
-	WHERE m.guid = @product_guid
+	) AS NUMERIC(18,2)) as DiscountPrice,
+	d.value as DiscountValue,
+	v.MeasurementUnit as Unit,
+	v.Volume,
+	v.IsDefault
+	FROM YH_ProductMaster m
+	JOIN YH_ProductVariants v ON m.Id = v.ProductId_FK
+	LEFT JOIN YH_DiscountMaster d ON d.id = v.DiscountId_FK
+	WHERE m.Guid = @product_guid
 END

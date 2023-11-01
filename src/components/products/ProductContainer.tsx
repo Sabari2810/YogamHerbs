@@ -26,7 +26,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
     const response: Response = await fetch(CART_ENDPOINT, {
       method: "POST",
       body: JSON.stringify({
-        productVariantId: product.variant_id,
+        productVariantId: product.VariantId,
         action: "INCREMENT"
       } as IAddToCartRequestBody)
     })
@@ -36,7 +36,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
   }
 
   const getPrice = () => {
-    return product.discount_price ?? product.price
+    return product.DiscountPrice ?? product.Price
   }
 
   return (
@@ -46,32 +46,32 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
       </div>
       {/* PRODUCT IMAGE */}
       <div onClick={() => {
-        router.push(`/product/${product.product_guid}`)
+        router.push(`/product/${product.ProductGuid}`)
       }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
-        <Image priority={true} key={product.variant_guid} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
+        <Image priority={true} key={product.VariantGuid} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
           src={imageUrl} />
       </div>
       {/* PRODUCT DETAILS */}
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='font-semibold text-xl line-clamp-2'>{product.title}</h1>
-          <p className='text-sm line-clamp-2'>{product.description}</p>
+          <h1 className='font-semibold text-xl line-clamp-2'>{product.Title}</h1>
+          <p className='text-sm line-clamp-2'>{product.Description}</p>
         </div>
         <div>
           <AiOutlineHeart size={20} />
         </div>
       </div>
       {/* PRICING DETAILS */}
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col items-start justify-between'>
         {/* PRICING */}
         <div className='flex items-center space-x-2'>
           {/* PRODUCT PRICE AFTER DISCOUNT */}
           <h1 className='font-semibold text-xl'>₹{getPrice()}</h1>
-          {product.discount_id &&
+          {product.DiscountId &&
             <>
               {/* PRODUCT PRICE */}
-              <h1 className='font-semibold text-md text-slate-400 line-through'>{product.price}</h1>
-              <h1>{product.discount_value}% OFF</h1>
+              <h1 className='font-semibold text-md text-slate-400 line-through'>{product.Price}</h1>
+              <h1>{product.DiscountValue}% OFF</h1>
             </>
           }
         </div>

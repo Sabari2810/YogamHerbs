@@ -2,10 +2,10 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-    const categories = await prisma.categoryMaster.findMany({
+    const categories = await prisma.yH_CategoryMaster.findMany({
         select: {
-            guid: true,
-            title: true
+            Guid: true,
+            Title: true
         }
     })
 
