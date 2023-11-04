@@ -8,37 +8,34 @@ import React, { useEffect, useState } from 'react'
 
 
 const Products: React.FC = () => {
-
     const [products, setProducts] = useState<IProduct[]>([])
     const [categories, setCategories] = useState<ICategory[]>([])
 
+    const fetchProducts = async () => {
+        const response: Response = await fetch(GET_PRODUCTS_ENDPOINT, {
+            cache: noCache,
+            next: {
+                tags: ["products"]
+            }
+        });
+        const productsData = await response.json() as IProduct[]
+        setProducts(productsData)
+    }
+
+    const fetchCategories = async () => {
+        const categoryResponse: Response = await fetch(GET_CATEGORIES_ENDPOINT, {
+            cache: noCache,
+            next: {
+                tags: ["categories"]
+            }
+        });
+
+        const categoryData = await categoryResponse.json() as ICategory[]
+        setCategories(categoryData)
+    }
+
     useEffect(() => {
-        // FETCH PRODUCT DETAILS
-        const fetchProducts = async () => {
-            const response: Response = await fetch(GET_PRODUCTS_ENDPOINT, {
-                cache: noCache,
-                next: {
-                    tags: ["products"]
-                }
-            });
-            const productsData = await response.json() as IProduct[]
-            setProducts(productsData)
-        }
 
-        const fetchCategories = async () => {
-
-
-            // FETCH CATEGORIES
-            const categoryResponse: Response = await fetch(GET_CATEGORIES_ENDPOINT, {
-                cache: noCache,
-                next: {
-                    tags: ["categories"]
-                }
-            });
-
-            const categoryData = await categoryResponse.json() as ICategory[]
-            setCategories(categoryData)
-        }
 
         fetchProducts()
         fetchCategories()

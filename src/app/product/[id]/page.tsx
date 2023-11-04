@@ -32,9 +32,7 @@ const Page: React.FC<IProps> = ({ params }) => {
     useEffect(() => {
         async function getProductVariants() {
             const response = await fetch(GET_PRODUCT_VARIANTS_ENDPOINT + params.id)
-
             const data = await response.json() as IProductVariant[]
-
             dispatch(setProductVariants(data))
         }
 
@@ -54,100 +52,39 @@ const Page: React.FC<IProps> = ({ params }) => {
         }
     }
 
-    const CustomLeftArrow: React.FC = ({ onClick }: any) => {
-        return (
-            <div onClick={onClick} className='p-1 bg-slate-200 rounded-full absolute left-4'>
-                <FaArrowLeft size={10} className="cursor-pointer" />
-            </div>
-        )
-    }
-
-    const CustomRightArrow: React.FC = ({ onClick }: any) => {
-        return (
-            <div onClick={onClick} className='p-1 bg-slate-200 rounded-full absolute right-4'>
-                <FaArrowRight size={10} className="cursor-pointer" />
-            </div>
-        )
-    }
-
-    const ProductCarousel = () => {
-        return (
-            <Carousel
-                customLeftArrow={<CustomLeftArrow />}
-                customRightArrow={<CustomRightArrow />}
-                arrows
-                draggable
-                focusOnSelect={false}
-                infinite
-                minimumTouchDrag={80}
-                showDots
-                slidesToSlide={1}
-                swipeable
-                responsive={{
-                    desktop: {
-                        breakpoint: {
-                            max: 3000,
-                            min: 1024
-                        },
-                        items: 4,
-                    },
-                    mobile: {
-                        breakpoint: {
-                            max: 464,
-                            min: 0
-                        },
-                        items: 1,
-                    },
-                    tablet: {
-                        breakpoint: {
-                            max: 1024,
-                            min: 464
-                        },
-                        items: 2,
-                    }
-                }}
-            >
-                {Array(10).fill(0).map((imageUrl, index) => {
-                    return (
-                        <></>
-                        // <Image key={imageUrl} className='w-full p-2 pb-6' width={50} objectFit='contain' height={50} src={product.image_url} alt="movie" />
-                    );
-                })}
-            </Carousel>
-        )
-    }
-
     return (
         <>
             {
-
                 currentVariant === undefined ?
-                    <div className='max-w-4xl grid grid-cols-2 mx-auto gap-10 items-center py-10'>
+                    <div className='max-w-4xl grid grid-cols-1 md:grid-cols-2 mx-auto gap-10 items-center py-10'>
                         <Skeleton height={250} className='col-span-1' />
                         <Skeleton height={350} width={600} className='col-span-1' />
                     </div>
                     :
-                    <div className='max-w-4xl mx-auto grid grid-cols-2 items-center gap-10 py-10'>
-                        {/* HERO SECTION */}
+                    <div className='max-w-4xl mx-auto grid sm:grid-cols-1 md:grid-cols-2 items-center gap-4 md:gap-10 py-4 md:py-10'>
                         {/* PRODUCT IMAGE */}
                         <div className='col-span-1'>
-                            <Image className='w-full rounded-lg object-cover h-96' width={700} height={450} alt='img'
+                            <Image className='w-full md:rounded-lg object-cover h-72 md:h-96' width={700} height={450} alt='img'
                                 src={process.env.NEXT_PUBLIC_STORAGE_URL?.replace("{image_id}",
                                     currentVariant!.ProductVariantGuid.toUpperCase()) ?? ""} />
                             {/* <ProductCarousel /> */}
                         </div>
                         {/* PRODUCT DETAILS */}
-                        <div className='flex flex-col space-y-2'>
+                        <div className='flex px-4 md:px-0 flex-col space-y-2'>
                             {/* TITLE SECTION */}
                             <div className='flex items-start space-x-2'>
-                                <h1 className='font-bold text-3xl'>{currentVariant.Title}</h1>
+                                <h1 className='font-bold text-xl md:text-3xl'>{currentVariant.Title}</h1>
                                 <div className='flex items-center space-x-2'>
-                                    <AiOutlineHeart size={35} />
-                                    <AiOutlineShareAlt size={35} />
+                                    <div className="h-7 md:h-10">
+                                        <AiOutlineHeart className="w-full h-full" />
+                                    </div>
+                                    <div className="h-7 md:h-10">
+                                        <AiOutlineShareAlt className="w-full h-full" />
+                                    </div>
                                 </div>
                             </div>
                             {/* DESCRIPTION */}
-                            <h2 className='font-semibold text-slate-600 line-clamp-3 text-xl'>{currentVariant.Description}</h2>
+                            <h2 className='font-semibold text-slate-600 line-clamp-3 text-sm md:text-xl'>{currentVariant.Description}</h2>
                             {/* RATING SECTION */}
                             <ProductRating rating={3.5} />
                             {/* PRICING SECTION */}
@@ -161,21 +98,26 @@ const Page: React.FC<IProps> = ({ params }) => {
                                 }
                             </div>
                             {/* VARIANTS AND QUANTITY SECTION */}
-                            <div className='flex justify-between'>
-                                <div className='grid grid-cols-3 items-center gap-2'>
+                            <div className='md:flex space-y-2 md:space-y-0 md:justify-between'>
+                                {/* VARIANTS */}
+                                <div className='grid grid-cols-4 md:grid-cols-2 items-center gap-2'>
                                     {
                                         variants.map((variant) => (
-                                            <button
-                                                onClick={() => dispatch(setCurrentVariant(variant))}
-                                                key={variant.ProductVariantGuid}
-                                                className={`px-2 py-1 
+                                            Array(4).fill(0).map(() => (
+                                                <button
+                                                    onClick={() => dispatch(setCurrentVariant(variant))}
+                                                    key={variant.ProductVariantGuid}
+                                                    className={`px-2 py-1 text-lg col-span-1
                                                 ${currentVariant.ProductVariantGuid === variant.ProductVariantGuid ? 'border-red-700 border-2 font-bold' : 'border-slate-900'} 
                                                 border rounded `}>{variant.Volume}
-                                                <span className='text-xs'>{variant.Unit.toLowerCase()}</span>
-                                            </button>
+                                                    <span className='text-xs'>{variant.Unit.toLowerCase()}</span>
+                                                </button>
+                                            ))
+
                                         ))
                                     }
                                 </div>
+                                {/* QUANTITY */}
                                 <div className='flex items-center space-x-2'>
                                     <h5 className='font-semibold text-lg'>Quantity</h5>
                                     <div className='border rounded-full w-32 justify-between flex'>
@@ -196,10 +138,9 @@ const Page: React.FC<IProps> = ({ params }) => {
                             {/* ESTIMATED DELIVERY */}
                             <div className='flex flex-col space-y-2'>
                                 <div className='grid grid-cols-6 space-x-2'>
-                                    <input placeholder='Enter Pincode' type="text" maxLength={6} className='col-span-5 border outline-none h-10 px-2' />
-                                    <Button className="col-span-1" label='Check' onClick={() => { }} />
+                                    <input placeholder='Enter Pincode' type="text" maxLength={6} className='col-span-4 md:col-span-5 border outline-none h-10 px-2' />
+                                    <Button className="col-span-2 md:col-span-1" label='Check' onClick={() => { }} />
                                 </div>
-                                {/* <p>Est.Delivery Date</p> */}
                             </div>
                         </div>
                     </div>
