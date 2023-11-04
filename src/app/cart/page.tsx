@@ -24,7 +24,7 @@ const Cart = () => {
         }
 
         getCartDetails()
-    }, [])
+    }, [dispatch])
 
     const updateCartItemQuantity = async ({ productVariantId, action }: IAddToCartRequestBody) => {
         const response: Response = await fetch(CART_ENDPOINT, {

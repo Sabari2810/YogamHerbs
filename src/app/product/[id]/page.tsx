@@ -39,7 +39,7 @@ const Page: React.FC<IProps> = ({ params }) => {
         }
 
         getProductVariants()
-    }, [])
+    }, [dispatch, params.id])
 
     const addToCart = async () => {
         const response: Response = await fetch(CART_ENDPOINT, {
