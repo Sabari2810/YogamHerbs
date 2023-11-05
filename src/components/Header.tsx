@@ -21,7 +21,7 @@ const Header = () => {
     const cartCount = useAppSelector(selectCartValue);
     const dispatch = useAppDispatch();
 
-    const getCartCount = async () => {
+    async function getCartCount() {
         const response = await fetch(CART_COUNT_ENDPOINT)
         if (response.ok) {
             const count = await response.json();
@@ -31,7 +31,7 @@ const Header = () => {
 
     useEffect(() => {
         getCartCount()
-    })
+    }, [])
 
 
     const menuItems: IMenuItem[] = [
