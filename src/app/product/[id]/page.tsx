@@ -103,17 +103,14 @@ const Page: React.FC<IProps> = ({ params }) => {
                                 <div className='grid grid-cols-4 md:grid-cols-2 items-center gap-2'>
                                     {
                                         variants.map((variant) => (
-                                            Array(4).fill(0).map(() => (
-                                                <button
-                                                    onClick={() => dispatch(setCurrentVariant(variant))}
-                                                    key={variant.ProductVariantGuid}
-                                                    className={`px-2 py-1 text-lg col-span-1
+                                            <button
+                                                onClick={() => dispatch(setCurrentVariant(variant))}
+                                                key={variant.ProductVariantGuid}
+                                                className={`px-2 py-1 text-lg col-span-1
                                                 ${currentVariant.ProductVariantGuid === variant.ProductVariantGuid ? 'border-red-700 border-2 font-bold' : 'border-slate-900'} 
                                                 border rounded `}>{variant.Volume}
-                                                    <span className='text-xs'>{variant.Unit.toLowerCase()}</span>
-                                                </button>
-                                            ))
-
+                                                <span className='text-xs'>{variant.Unit.toLowerCase()}</span>
+                                            </button>
                                         ))
                                     }
                                 </div>

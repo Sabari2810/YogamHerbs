@@ -42,7 +42,7 @@ const Products: React.FC = () => {
     }, [])
 
     return (
-        <div className='max-w-7xl py-10 mx-auto flex items-center justify-between'>
+        <div className='max-w-7xl py-10 px-2 mx-auto flex items-center justify-between'>
             {/* FILTER */}
             <div className='grid grid-cols-8 w-full'>
                 {
@@ -58,7 +58,7 @@ const Products: React.FC = () => {
 
 
                 {/* PRODUCT LIST */}
-                <div className='w-full col-span-6 grid md:grid-cols-3 sm:grid-cols-2  gap-4'>
+                <div className='w-full col-span-6 grid lg:grid-cols-3 sm:grid-cols-2  gap-4'>
                     {
                         products.map((product) => {
                             return (
