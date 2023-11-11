@@ -2,7 +2,7 @@
 import { IProduct } from '@/types/types'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineHeart } from 'react-icons/ai'
 import Button from '../Button'
 import { CART_ENDPOINT } from '@/lib/constants'
@@ -18,11 +18,13 @@ interface IProps {
 
 const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const banner_url = "/best-seller.svg"
 
   const dispatch = useDispatch();
 
   const addToCart = async () => {
+    setIsLoading(true);
     const response: Response = await fetch(CART_ENDPOINT, {
       method: "POST",
       body: JSON.stringify({
@@ -33,6 +35,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
     if (response.ok) {
       dispatch(addCartItem())
     }
+    setIsLoading(false);
   }
 
   const getPrice = () => {
@@ -82,7 +85,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
         {/* RATING */}
         <ProductRating rating={3.5} />
       </div>
-      <Button className='text-xs md:text-lg' onClick={addToCart} label='Add to Cart' />
+      <Button className='text-xs md:text-lg' isLoading={isLoading} onClick={addToCart} label='Add to Cart' />
     </div>
   )
 }

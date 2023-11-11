@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { IAddToCartRequestBody } from '@/types/apitypes'
 import { IProductVariant } from '@/types/types'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineHeart, AiOutlineShareAlt } from 'react-icons/ai'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 
@@ -25,6 +25,7 @@ const Page: React.FC<IProps> = ({ params }) => {
     const currentVariant: IProductVariant | undefined = useAppSelector(selectCurrentVariant);
     const variants: IProductVariant[] | undefined = useAppSelector(selectVariants);
     const quantity: number | undefined = useAppSelector(selectCurrentVariantQuantity);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function getProductVariants() {
@@ -37,6 +38,7 @@ const Page: React.FC<IProps> = ({ params }) => {
     }, [dispatch, params.id])
 
     const addToCart = async () => {
+        setIsLoading(true);
         const response: Response = await fetch(CART_ENDPOINT, {
             method: "POST",
             body: JSON.stringify({
@@ -47,6 +49,7 @@ const Page: React.FC<IProps> = ({ params }) => {
         if (response.ok) {
             dispatch(addCartItem())
         }
+        setIsLoading(false);
     }
 
     const ScreenSkeleton: React.FC = () => {
@@ -152,7 +155,7 @@ const Page: React.FC<IProps> = ({ params }) => {
                                         </div>
                                     </div>
                                     {/* ADD TO CART */}
-                                    <Button className='py-4' onClick={async () => await addToCart()} label='Add to Cart' />
+                                    <Button isLoading={isLoading} className='py-4' onClick={async () => await addToCart()} label='Add to Cart' />
                                     {/* ESTIMATED DELIVERY */}
                                     <div className='flex flex-col space-y-2'>
                                         <div className='grid grid-cols-6 space-x-2'>
