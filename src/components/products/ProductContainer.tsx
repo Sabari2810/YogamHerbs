@@ -40,37 +40,41 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
   }
 
   return (
-    <div className='bg-white space-y-3 relative rounded-2xl shadow-sm p-5 border-[1px]'>
-      <div className='absolute top-2 z-10 left-2'>
-        <Image alt='' width={50} height={10} src={banner_url} />
+    <div className='bg-white w-full space-y-3 relative rounded-xl shadow-sm p-2 md:p-5 border-[1px]'>
+      <div className='absolute top-2 z-10 -left-2 md:left-2'>
+        <Image alt='' className='md:h-10 h-7' width={50} height={10} src={banner_url} />
       </div>
       {/* PRODUCT IMAGE */}
       <div onClick={() => {
         router.push(`/product/${product.ProductGuid}`)
       }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
-        <Image priority={true} key={product.VariantGuid} width={400} height={100} className='w-full h-64 object-cover' alt='product-image'
-          src={imageUrl} />
+        <Image priority={true} key={product.VariantGuid} width={400} height={100} className='w-full h-36 md:h-64 object-cover' alt='product-image'
+          src={"https://dsitestsa.blob.core.windows.net/yogam/C2ED9EEB-631D-40C4-87BB-BC2BE772C926.jpg" ?? imageUrl} />
       </div>
       {/* PRODUCT DETAILS */}
-      <div className='flex items-center justify-between'>
+      <div className='flex items-start justify-between'>
         <div>
-          <h1 className='font-semibold text-xl line-clamp-2'>{product.Title}</h1>
-          <p className='text-sm line-clamp-2'>{product.Description}</p>
+          <h1 className='font-semibold text-xs md:text-xl line-clamp-2'>{product.Title}</h1>
+          <p className='md:block hidden text-sm'>
+            <span className='line-clamp-2'>
+              {product.Description}
+            </span>
+          </p>
         </div>
-        <div>
+        <div className='hidden md:block'>
           <AiOutlineHeart size={20} />
         </div>
       </div>
       {/* PRICING DETAILS */}
       <div className='flex flex-col items-start justify-between'>
         {/* PRICING */}
-        <div className='flex items-center space-x-2'>
+        <div className='flex items-center md:text-base text-xs space-x-1 md:space-x-2'>
           {/* PRODUCT PRICE AFTER DISCOUNT */}
-          <h1 className='font-semibold text-xl'>₹{getPrice()}</h1>
+          <h1 className='font-semibold md:text-xl'>₹{getPrice()}</h1>
           {product.DiscountId &&
             <>
               {/* PRODUCT PRICE */}
-              <h1 className='font-semibold text-md text-slate-400 line-through'>{product.Price}</h1>
+              <h1 className='font-semibold text-slate-400 line-through'>{product.Price}</h1>
               <h1>{product.DiscountValue}% OFF</h1>
             </>
           }
@@ -78,7 +82,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
         {/* RATING */}
         <ProductRating rating={3.5} />
       </div>
-      <Button onClick={addToCart} label='Add to Cart' />
+      <Button className='text-xs md:text-lg' onClick={addToCart} label='Add to Cart' />
     </div>
   )
 }

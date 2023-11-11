@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
-import { AiOutlineMenu, AiOutlineMenuFold, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
+import { AiFillAppstore, AiOutlineGift, AiOutlineHome, AiOutlineIdcard, AiOutlineMenu, AiOutlineMenuFold, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { useSelector } from 'react-redux';
 import { useEffect } from "react";
@@ -11,10 +11,12 @@ import { CART_COUNT_ENDPOINT, CART_ENDPOINT } from '@/lib/constants';
 import { useRouter } from 'next/router';
 import HeaderDrawer from './HeaderDrawer';
 import { setIsDrawerOpen } from '@/redux/features/drawerSlice';
+import { IconType } from 'react-icons';
 
-interface IMenuItem {
+export interface IMenuItem {
     title: string;
     path: string;
+    icon: IconType
 }
 
 const Header = () => {
@@ -37,23 +39,28 @@ const Header = () => {
     const menuItems: IMenuItem[] = [
         {
             title: "Home",
-            path: "/"
+            path: "/",
+            icon: AiOutlineHome
         },
         {
             title: "Products",
-            path: "/products"
+            path: "/products",
+            icon: AiFillAppstore
         },
         {
             title: "Gifts",
-            path: "/gifts"
+            path: "/gifts",
+            icon: AiOutlineGift
         },
         {
             title: "About us",
-            path: "/about-us"
+            path: "/about-us",
+            icon: AiOutlineIdcard
         },
         {
             title: "Contact us",
-            path: "#getintouch"
+            path: "#getintouch",
+            icon: AiOutlineUser
         }
     ]
 
@@ -66,7 +73,7 @@ const Header = () => {
                     <button className='md:hidden' onClick={() => dispatch(setIsDrawerOpen(true))}>
                         <AiOutlineMenu size={25} />
                     </button>
-                    <Image className='h-8 md:h-10 w-16 md:w-24' width={100} height={100} alt='' src={"/main-logo.png"} />
+                    <Image className='h-7 md:h-9 w-20 md:w-28' width={100} height={100} alt='' src={"/yogam-main.png"} />
                     {/* MENU ITEMS */}
                     <div className='items-center hidden md:flex space-x-4'>
                         {menuItems.map((menuItem) => (
@@ -87,7 +94,7 @@ const Header = () => {
                     <LiaShippingFastSolid size={25} />
                 </div>
             </div>
-            <HeaderDrawer />
+            <HeaderDrawer menuItems={menuItems} />
         </>
 
     )

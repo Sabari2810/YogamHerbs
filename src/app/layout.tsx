@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import WhatsappContainer from '@/components/WhatsappContainer'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { createTheme } from '@mui/material/styles'
 
 const inter = Inter({ subsets: ['latin'] })
 

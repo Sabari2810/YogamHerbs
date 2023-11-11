@@ -6,3 +6,7 @@ export interface IAddToCartRequestBody {
 export interface IAddToCartResponseBody {
     productVariantId: string
 }
+
+export interface IGetProductsRequestBody {
+    page: number
+}

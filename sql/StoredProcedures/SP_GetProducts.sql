@@ -1,4 +1,7 @@
 CREATE OR ALTER PROCEDURE SP_GetProducts
+(
+	@page INT
+)
 AS
 BEGIN
 	SELECT
@@ -23,4 +26,6 @@ BEGIN
 	JOIN YH_ProductVariants v ON m.Id = v.ProductId_FK
 	LEFT JOIN YH_DiscountMaster d ON d.Id = v.DiscountId_FK AND d.EffTo > GETDATE()
 	WHERE v.Id IS NOT NULL AND v.IsDefault = 1
+	ORDER BY m.CreatedDt ASC
+	OFFSET (@page - 1) * 100 ROWS FETCH NEXT 100 ROWS ONLY
 END
