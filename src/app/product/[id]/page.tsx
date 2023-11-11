@@ -85,12 +85,9 @@ const Page: React.FC<IProps> = ({ params }) => {
                             <>
                                 {/* PRODUCT IMAGE */}
                                 <div className='col-span-1'>
-
-
                                     <Image className='w-full md:rounded-sm object-cover h-72 md:h-96' width={700} height={450} alt='img'
                                         src={process.env.NEXT_PUBLIC_STORAGE_URL?.replace("{image_id}",
                                             currentVariant.ProductVariantGuid.toUpperCase()) ?? ""} />
-
                                     {/* <ProductCarousel /> */}
                                 </div>
                                 {/* PRODUCT DETAILS */}

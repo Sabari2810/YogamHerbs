@@ -49,7 +49,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
         router.push(`/product/${product.ProductGuid}`)
       }} className='relative rounded hover:scale-95 duration-200 cursor-pointer'>
         <Image priority={true} key={product.VariantGuid} width={400} height={100} className='w-full h-36 md:h-64 object-cover' alt='product-image'
-          src={"https://dsitestsa.blob.core.windows.net/yogam/C2ED9EEB-631D-40C4-87BB-BC2BE772C926.jpg" ?? imageUrl} />
+          src={imageUrl ?? "https://dsitestsa.blob.core.windows.net/yogam/C2ED9EEB-631D-40C4-87BB-BC2BE772C926.jpg"} />
       </div>
       {/* PRODUCT DETAILS */}
       <div className='flex items-start justify-between'>
