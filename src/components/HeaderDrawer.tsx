@@ -44,7 +44,7 @@ const HeaderDrawer: React.FC<IProps> = ({ menuItems }) => {
                 <div className="h-full relative py-10">
                     <div className="flex flex-col items-start">
                         {menuItems.map((menuItem) => (
-                            <div className="flex px-3 space-x-2 first:border-t-[1.8px] border-b-[1.8px]  py-3 items-center w-full">
+                            <div key={menuItem.title} className="flex px-3 space-x-2 first:border-t-[1.8px] border-b-[1.8px]  py-3 items-center w-full">
                                 <menuItem.icon />
                                 <Link className="w-full font-semibold" onClick={() => {
                                     dispatch(setIsDrawerOpen(false));
