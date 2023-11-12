@@ -1,3 +1,8 @@
+export interface IProductList {
+    total_pages: number
+    products: IProduct[]
+}
+
 export interface IProduct {
     ProductId: number;
     ProductGuid: string;

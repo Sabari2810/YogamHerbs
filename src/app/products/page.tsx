@@ -4,10 +4,10 @@ import Filters from '@/components/products/Filters';
 import ProductContainer from '@/components/products/ProductContainer';
 import { GET_CATEGORIES_ENDPOINT, GET_PRODUCTS_ENDPOINT } from '@/lib/constants';
 import { noCache } from '@/lib/utils';
-import { changePage, selectCategories, selectCurrentPage, selectPageProducts, setCategories, setProducts } from '@/redux/features/productsSlice';
+import { changePage, selectCategories, selectCurrentPage, selectPageProducts, selectTotalPages, setCategories, setProducts, setTotalPages } from '@/redux/features/productsSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { IGetProductsRequestBody } from '@/types/apitypes';
-import { ICategory, IProduct } from '@/types/types';
+import { ICategory, IProduct, IProductList } from '@/types/types';
 import { Pagination } from '@mui/material';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ const Products: React.FC = () => {
     const products = useAppSelector(selectPageProducts)
     const categories = useAppSelector(selectCategories)
     const currentPage = useAppSelector(selectCurrentPage)
+    const totalPages = useAppSelector(selectTotalPages)
     const searchParams = useSearchParams()
     const pathname = usePathname()
 
@@ -30,8 +31,16 @@ const Products: React.FC = () => {
             method: "POST",
             body: JSON.stringify({ page: page } as IGetProductsRequestBody)
         });
-        const productsData = await response.json() as IProduct[]
-        dispatch(setProducts(productsData))
+
+        const responseBody = await response.json()
+
+        const productsData: IProductList = {
+            products: JSON.parse(responseBody.products) as IProduct[],
+            total_pages: responseBody.total_pages
+        }
+
+        dispatch(setProducts(productsData.products))
+        dispatch(setTotalPages(productsData.total_pages))
     }
 
     const fetchCategories = async () => {
@@ -63,7 +72,7 @@ const Products: React.FC = () => {
     const handlePageChange = async (e: React.ChangeEvent<unknown>, value: number) => {
         dispatch(changePage(value))
         setPageQueryString(value)
-        dispatch(setProducts([]));
+        dispatch(setProducts(null));
         await fetchProducts(value)
     }
 
@@ -77,7 +86,7 @@ const Products: React.FC = () => {
                         {/* FILTER LIST */}
                         <hr className='py-3' />
                         <div className='space-y-2'>
-                            {categories.length === 0 ? <>
+                            {categories === null ? <>
                                 <CustomSkeleton className='h-52' />
                                 <CustomSkeleton className='h-52' />
                             </>
@@ -94,7 +103,7 @@ const Products: React.FC = () => {
                 <div className='col-span-8 items-center space-y-3 justify-center flex-col flex md:col-span-6'>
                     <div className='w-full grid lg:grid-cols-3 grid-cols-2 gap-4'>
                         {
-                            products.length === 0 ? (
+                            products === null ? (
                                 Array(9).fill(0).map((value, idx) => (
                                     <CustomSkeleton key={idx} className='h-64 w-30' />
                                 ))
@@ -108,7 +117,7 @@ const Products: React.FC = () => {
                                 })
                         }
                     </div>
-                    <Pagination page={currentPage} onChange={handlePageChange} count={10} />
+                    <Pagination page={currentPage} onChange={handlePageChange} count={totalPages} />
                 </div>
             </div>
         </div>

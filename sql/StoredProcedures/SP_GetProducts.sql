@@ -4,6 +4,8 @@ CREATE OR ALTER PROCEDURE SP_GetProducts
 )
 AS
 BEGIN
+	
+	WITH ProductData AS(
 	SELECT
 		m.Id as ProductId,
 		m.Guid as ProductGuid,
@@ -27,5 +29,15 @@ BEGIN
 	LEFT JOIN YH_DiscountMaster d ON d.Id = v.DiscountId_FK AND d.EffTo > GETDATE()
 	WHERE v.Id IS NOT NULL AND v.IsDefault = 1
 	ORDER BY m.CreatedDt ASC
-	OFFSET (@page - 1) * 100 ROWS FETCH NEXT 100 ROWS ONLY
+	OFFSET (@page - 1) * 100 ROWS FETCH NEXT 100 ROWS ONLY)
+
+	SELECT
+		(SELECT * FROM ProductData FOR JSON PATH) AS products,
+		(
+			SELECT 
+				CEILING(COUNT(M.Id) / 100.0) 
+			FROM YH_ProductMaster m 
+			JOIN YH_ProductVariants v ON m.Id = v.ProductId_FK
+			WHERE v.IsDefault = 1
+		) AS total_pages
 END

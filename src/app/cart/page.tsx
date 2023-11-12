@@ -1,6 +1,6 @@
 "use client"
 import { CART_ENDPOINT } from '@/lib/constants';
-import { addCartItem, selectCartItems, setCartItems, updateCartItem } from '@/redux/features/cartSlice';
+import { selectCartItems, setCartItems, updateCartItem } from '@/redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { IAddToCartRequestBody } from '@/types/apitypes';
 import { ICartItem } from '@/types/types';
@@ -26,18 +26,20 @@ const Cart = () => {
         getCartDetails()
     }, [dispatch])
 
-    const updateCartItemQuantity = async ({ productVariantId, action }: IAddToCartRequestBody) => {
+    const updateCartItemQuantity = async ({ item, action }: { item: ICartItem; action: "INCREMENT" | "DECREMENT" }) => {
+        if (item.Quantity === 0 && action === "DECREMENT") return
+        const variantId = item.ProductVariantId
         const response: Response = await fetch(CART_ENDPOINT, {
             method: "POST",
             body: JSON.stringify({
-                productVariantId,
-                action
+                productVariantId: variantId,
+                value: action === "INCREMENT" ? 1 : -1
             } as IAddToCartRequestBody)
         })
         if (response.ok) {
             dispatch(updateCartItem({
                 action: action,
-                product_variant_id: productVariantId
+                product_variant_id: variantId
             }))
         }
     }
@@ -75,7 +77,7 @@ const Cart = () => {
                         <div className='border rounded-full w-32 justify-between flex'>
                             <button onClick={async () => {
                                 await updateCartItemQuantity({
-                                    productVariantId: item.ProductVariantId,
+                                    item,
                                     action: "DECREMENT"
                                 })
                             }} className='px-3 rounded-l-full py-1 bg-slate-300'>
@@ -86,7 +88,7 @@ const Cart = () => {
                             </p>
                             <button onClick={async () => {
                                 await updateCartItemQuantity({
-                                    productVariantId: item.ProductVariantId,
+                                    item,
                                     action: "INCREMENT"
                                 })
                             }} className='px-3 rounded-r-full py-1 bg-slate-300'>

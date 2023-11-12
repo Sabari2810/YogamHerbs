@@ -3,7 +3,7 @@ import Button from '@/components/Button'
 import CustomSkeleton from '@/components/CustomSkeleton'
 import ProductRating from '@/components/Rating'
 import { CART_ENDPOINT, GET_PRODUCT_VARIANTS_ENDPOINT } from '@/lib/constants'
-import { addCartItem } from '@/redux/features/cartSlice'
+import { increaseCartCount } from '@/redux/features/cartSlice'
 import { decrementVariantQuantity, incrementVariantQuantity, selectCurrentVariant, selectCurrentVariantQuantity, selectVariants, setCurrentVariant, setProductVariants } from '@/redux/features/productSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { IAddToCartRequestBody } from '@/types/apitypes'
@@ -43,11 +43,11 @@ const Page: React.FC<IProps> = ({ params }) => {
             method: "POST",
             body: JSON.stringify({
                 productVariantId: currentVariant?.ProductVariantId,
-                action: "INCREMENT"
+                value: quantity
             } as IAddToCartRequestBody)
         })
         if (response.ok) {
-            dispatch(addCartItem())
+            dispatch(increaseCartCount(quantity))
         }
         setIsLoading(false);
     }

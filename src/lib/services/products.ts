@@ -6,7 +6,7 @@ export async function getProducts(page: number) {
     const request = new sql.Request()
     request.input("page", sql.Numeric, page)
     const result = await request.execute("dbo.SP_GetProducts")
-    return result.recordset
+    return result.recordset[0]
 }
 
 export async function getProductVariants(productGuid: string) {

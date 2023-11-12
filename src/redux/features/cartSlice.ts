@@ -17,11 +17,10 @@ export const cart = createSlice({
     initialState,
     reducers: {
         reset: () => structuredClone(initialState),
-        addCartItem: (state) => {
-            state.value += 1;
+        increaseCartCount: (state, action: PayloadAction<number>) => {
+            state.value += action.payload;
         },
         setCartCount: (state, action: PayloadAction<number>) => {
-            console.log(action.payload);
             state.value = action.payload
         },
         deleteCartItem: (state) => {
@@ -32,22 +31,25 @@ export const cart = createSlice({
         },
         updateCartItem: (state, action: PayloadAction<IUpdateCartItem>) => {
             const currentItem = state.items.find((item) => item.ProductVariantId === action.payload.product_variant_id);
+            const price = currentItem?.DiscountPrice ?? currentItem?.Price
             if (action.payload.action === "INCREMENT") {
                 currentItem!.Quantity += 1;
                 state.value += 1;
-                currentItem!.TotalPrice = Number((currentItem!.TotalPrice + currentItem!.Price).toFixed(2))
+                currentItem!.TotalPrice = Number((currentItem!.TotalPrice + price!).toFixed(2))
             }
             else {
                 currentItem!.Quantity -= 1;
                 state.value -= 1;
-                currentItem!.TotalPrice = Number((currentItem!.TotalPrice - currentItem!.Price).toFixed(2))
+                currentItem!.TotalPrice =
+                    currentItem!.Quantity > 0 ? Number((currentItem!.TotalPrice - price!).toFixed(2)) : 0
+
             }
         }
     },
 });
 
 export const {
-    addCartItem,
+    increaseCartCount,
     deleteCartItem,
     setCartCount,
     setCartItems,

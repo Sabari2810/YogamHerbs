@@ -7,7 +7,7 @@ import { AiOutlineHeart } from 'react-icons/ai'
 import Button from '../Button'
 import { CART_ENDPOINT } from '@/lib/constants'
 import { useDispatch } from 'react-redux'
-import { addCartItem } from '@/redux/features/cartSlice'
+import { increaseCartCount } from '@/redux/features/cartSlice'
 import { IAddToCartRequestBody } from '@/types/apitypes'
 import ProductRating from '../Rating'
 
@@ -29,11 +29,11 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
       method: "POST",
       body: JSON.stringify({
         productVariantId: product.VariantId,
-        action: "INCREMENT"
+        value: 1
       } as IAddToCartRequestBody)
     })
     if (response.ok) {
-      dispatch(addCartItem())
+      dispatch(increaseCartCount(1))
     }
     setIsLoading(false);
   }

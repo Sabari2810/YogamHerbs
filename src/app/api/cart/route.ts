@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { getCartDetails } from "@/lib/services/cart";
+import { getCartDetails, updateCartDetails } from "@/lib/services/cart";
 import { IAddToCartRequestBody } from "@/types/apitypes";
 import { NextRequest } from "next/server";
 
@@ -17,37 +17,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    const { productVariantId, action }: IAddToCartRequestBody = await req.json();
-
+    const { productVariantId, value }: IAddToCartRequestBody = await req.json();
     const sessionId = req.cookies.get("user");
-
-    // INSERT A NEW RECORD WIH A SESSION ID AND THE PRODUCT VARIANT ID
-    // UPDATE THE QUANTITY BY ONE IF THE RECORD ALREADY EXIST
-
-    try {
-        const cart = await prisma.yH_Cart.upsert({
-            where: {
-                SessionId_ProductVariantId_FK: {
-                    SessionId: sessionId!.value,
-                    ProductVariantId_FK: productVariantId,
-                }
-            },
-            update: {
-                Quantity: {
-                    increment: action == "INCREMENT" ? 1 : -1
-                },
-                ModifiedDt: new Date()
-            },
-            create: {
-                Quantity: 1,
-                SessionId: sessionId!.value,
-                ProductVariantId_FK: productVariantId
-            }
-        })
-    } catch (error) {
-        console.log('error', error)
-    }
-
-
+    await updateCartDetails(sessionId?.value!, productVariantId, value)
     return new Response();
 }
