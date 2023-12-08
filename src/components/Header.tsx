@@ -1,4 +1,4 @@
-import { selectCartValue, setCartCount } from '@/redux/features/cartSlice';
+import { selectCartTotalCount, setCartCount } from '@/redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,7 +20,7 @@ export interface IMenuItem {
 }
 
 const Header = () => {
-    const cartCount = useAppSelector(selectCartValue);
+    const cartCount = useAppSelector(selectCartTotalCount);
     const dispatch = useAppDispatch();
 
     async function getCartCount() {

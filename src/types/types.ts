@@ -3,6 +3,12 @@ export interface IProductList {
     products: IProduct[]
 }
 
+export interface IOrder {
+    OrderId: number;
+    OrderGuid: string;
+    TotalPrice: number;
+}
+
 export interface IProduct {
     ProductId: number;
     ProductGuid: string;

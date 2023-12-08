@@ -3,13 +3,17 @@ import { RootState } from "../store";
 import { ICartItem, IUpdateCartItem } from "@/types/types";
 
 type CartState = {
-    value: number;
-    items: ICartItem[]
+    totalItems: number;
+    items: ICartItem[];
+    couponApplied: boolean;
+    couponDiscount: number;
 };
 
 const initialState = {
-    value: 0,
-    items: []
+    totalItems: 0,
+    items: [],
+    couponApplied: false,
+    couponDiscount: 0
 } as CartState;
 
 export const cart = createSlice({
@@ -18,13 +22,13 @@ export const cart = createSlice({
     reducers: {
         reset: () => structuredClone(initialState),
         increaseCartCount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload;
+            state.totalItems += action.payload;
         },
         setCartCount: (state, action: PayloadAction<number>) => {
-            state.value = action.payload
+            state.totalItems = action.payload
         },
         deleteCartItem: (state) => {
-            state.value -= 1;
+            state.totalItems -= 1;
         },
         setCartItems: (state, action: PayloadAction<ICartItem[]>) => {
             state.items = action.payload
@@ -34,12 +38,12 @@ export const cart = createSlice({
             const price = currentItem?.DiscountPrice ?? currentItem?.Price
             if (action.payload.action === "INCREMENT") {
                 currentItem!.Quantity += 1;
-                state.value += 1;
+                state.totalItems += 1;
                 currentItem!.TotalPrice = Number((currentItem!.TotalPrice + price!).toFixed(2))
             }
             else {
                 currentItem!.Quantity -= 1;
-                state.value -= 1;
+                state.totalItems -= 1;
                 currentItem!.TotalPrice =
                     currentItem!.Quantity > 0 ? Number((currentItem!.TotalPrice - price!).toFixed(2)) : 0
 
@@ -56,7 +60,8 @@ export const {
     updateCartItem
 } = cart.actions;
 
-export const selectCartValue = (state: RootState) => state.CartReducer.value;
+export const selectCartTotalCount = (state: RootState) => state.CartReducer.totalItems;
 export const selectCartItems = (state: RootState) => state.CartReducer.items;
+export const selectCouponApplied = (state: RootState) => state.CartReducer.couponApplied;
 
 export default cart.reducer;
