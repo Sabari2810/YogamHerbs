@@ -24,14 +24,14 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} w-full relative h-full`}>
+      <body className={`${inter.className} w-full bg-white relative h-full`}>
         <Providers>
           <div className='fixed bottom-5 bg-white rounded-lg z-50 right-5 m-auto flex items-center'>
             <WhatsappContainer />
           </div>
           <Header />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

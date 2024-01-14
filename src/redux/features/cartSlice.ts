@@ -20,7 +20,7 @@ export const cart = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        reset: () => structuredClone(initialState),
+        resetCart: () => structuredClone(initialState),
         increaseCartCount: (state, action: PayloadAction<number>) => {
             state.totalItems += action.payload;
         },
@@ -57,7 +57,8 @@ export const {
     deleteCartItem,
     setCartCount,
     setCartItems,
-    updateCartItem
+    updateCartItem,
+    resetCart
 } = cart.actions;
 
 export const selectCartTotalCount = (state: RootState) => state.CartReducer.totalItems;

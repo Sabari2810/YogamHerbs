@@ -1,4 +1,4 @@
-import { createOrder } from "@/lib/services/order";
+import { createOrder, updateRazorOrderId } from "@/lib/services/order";
 import { IOrder } from "@/types/types";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
@@ -9,8 +9,6 @@ export async function POST(req: NextRequest) {
     // GET SESSION
     const sessionId = cookies().get('user');
 
-    console.log('sessionId', sessionId)
-
     if (sessionId === undefined) {
         return Response.json({}, {
             status: 404
@@ -20,8 +18,8 @@ export async function POST(req: NextRequest) {
     const order: IOrder = await createOrder(sessionId.value);
 
     const razorpay = new Razorpay({
-        key_id: 'rzp_test_6O84cWnqInEa8T',
-        key_secret: '6mgeEdeNi9fN6qpk2qT13ZgF'
+        key_id: process.env.NEXT_PUBLIC_RAZOR_PAY_ID ?? "",
+        key_secret: process.env.RAZOR_PAY_SECRET ?? ""
     })
 
     const payment_capture = 1
@@ -33,15 +31,13 @@ export async function POST(req: NextRequest) {
         payment_capture
     }
 
-    try {
-        const response = await razorpay.orders.create(options)
+    const response = await razorpay.orders.create(options)
 
-        return new Response(JSON.stringify({
-            id: response.id,
-            currency: response.currency,
-            amount: response.amount
-        }))
-    } catch (error) {
-        console.log(error)
-    }
+    await updateRazorOrderId(order.OrderId, response.id);
+
+    return new Response(JSON.stringify({
+        id: response.id,
+        currency: response.currency,
+        amount: response.amount
+    }))
 }

@@ -31,7 +31,7 @@ const Cart = () => {
     return (
         <>
             {
-                cartItems !== undefined && cartItems.length > 0 ? <div className='max-w-7xl mx-auto py-10'>
+                cartItems !== undefined && cartItems.length > 0 ? <div className='max-w-7xl mx-auto pb-10 pt-2'>
                     <div className='flex items-center gap-2 justify-center py-4'>
                         <AiOutlineShoppingCart size={25} />
                         <h1 className='font-bold text-2xl capitalize'>

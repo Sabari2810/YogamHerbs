@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE SP_CreateOrder
+CREATE OR ALTER PROCEDURE SP_CreateRazorOrder
 (
 	@session_id UNIQUEIDENTIFIER
 )
@@ -7,7 +7,6 @@ BEGIN
 
 	SELECT 
 		variant.id as variant_id,
-		variant.price as variant_price,
 		CAST(dbo.func_GetVariantPrice(variant.id) AS NUMERIC(18,2)) as item_price,
 		CAST(dbo.func_GetVariantPrice(variant.id) * cart.quantity AS NUMERIC(18,2)) as total_price,
 		cart.quantity,
@@ -20,19 +19,19 @@ BEGIN
 	WHERE SessionId = @session_id
 
 	-- CREATE ORDER
-	INSERT INTO YH_Orders (TotalPrice , StatusId_FK ) VALUES (
+	INSERT INTO YH_RazorOrders (TotalPrice , StatusId_FK ) VALUES (
 		(SELECT SUM(total_price) FROM #OrderDetails),
-		(SELECT TOP 1 id FROM YH_OrderStatus WHERE Status = 'TODO')
+		(SELECT TOP 1 id FROM YH_RazorOrderStatus WHERE Status = 'TODO')
 	)
 
 	DECLARE @order_id INT
 	SELECT @order_id = SCOPE_IDENTITY()
 
 	--INSERT ORDER ITEMS
-	INSERT INTO YH_OrderItem (OrderId_FK, ItemDiscountedPrice, ItemPrice, ItemDiscount, TotalPrice, Quantity, ProductVariantId_FK, DiscountId)
-	SELECT @order_id,item_price, variant_price, discount_price, total_price, quantity, variant_id, discount_id FROM #OrderDetails
+	INSERT INTO YH_RazorOrderItem (OrderId_FK, ItemPrice, ItemDiscount, TotalPrice, Quantity, ProductVariantId_FK, DiscountId)
+	SELECT @order_id, item_price, discount_price, total_price, quantity, variant_id, discount_id FROM #OrderDetails
 
-	SELECT id as OrderId, guid as OrderGuid, TotalPrice FROM YH_Orders WHERE id = @order_id
+	SELECT id as OrderId, guid as OrderGuid, TotalPrice FROM YH_RazorOrders WHERE id = @order_id
 END
 
 

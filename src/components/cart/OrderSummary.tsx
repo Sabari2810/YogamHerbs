@@ -24,7 +24,7 @@ const OrderSummary = () => {
                 </div>
                 <div className='flex border-b-2 items-center py-2 justify-between'>
                     <p>Total</p>
-                    <p>{cartItems.reduce((total, item) => item.TotalPrice + total, 0)}</p>
+                    <p>{cartItems.reduce((total, item) => item.TotalPrice + total, 0).toFixed(2)}</p>
                 </div>
             </div>
 
@@ -42,7 +42,7 @@ const OrderSummary = () => {
 
                 <div className='flex border-b-2 items-center py-2 justify-between'>
                     <p>Grand Total</p>
-                    <p>{cartItems.reduce((total, item) => item.TotalPrice + total, 0)}</p>
+                    <p>{cartItems.reduce((total, item) => item.TotalPrice + total, 0).toFixed(2)}</p>
                 </div>
             </div>
         </div>

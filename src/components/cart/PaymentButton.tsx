@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '../Button'
-import { CHECKOUT_ENDPOINT, LOGO_ENDPOINT } from '@/lib/constants'
+import { CHECKOUT_ENDPOINT, DELETE_CART_ENDPOINT, LOGO_ENDPOINT } from '@/lib/constants'
+import { useRouter } from 'next/navigation'
+import { resetCart } from '@/redux/features/cartSlice'
+import { useAppDispatch } from '@/redux/hooks'
 
 function loadScript(src: string) {
     return new Promise((resolve) => {
@@ -17,7 +20,28 @@ function loadScript(src: string) {
 }
 
 const PaymentButton = () => {
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const clearCartItems = async () => {
+        if (await deleteCart()) {
+            dispatch(resetCart())
+        }
+    }
+
+    const deleteCart = async () => {
+        const response = await fetch(DELETE_CART_ENDPOINT, {
+            method: "DELETE"
+        })
+        if (response.ok) {
+            return true
+        }
+        return false
+    }
+
     async function displayRazorpay() {
+        setIsLoading(true)
         // LOAD RAZORPAY SCRIPT
         const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js")
 
@@ -28,6 +52,8 @@ const PaymentButton = () => {
         // GET ORDER INFORMATION
         const response = await fetch(CHECKOUT_ENDPOINT, { method: 'POST' })
 
+        setIsLoading(false);
+
         if (response.status === 404) {
             return alert("Something's changed, Please refresh the page")
         }
@@ -35,17 +61,16 @@ const PaymentButton = () => {
         const data = await response.json();
 
         const options = {
-            key: "rzp_test_6O84cWnqInEa8T",
+            key: process.env.RAZOR_PAY_ID,
             currency: data.currency,
             amount: data.amount.toString(),
             order_id: data.id,
-            name: 'Donation',
+            name: 'Payment',
             description: 'Thank you for choosing Yogam Herbs.',
             image: LOGO_ENDPOINT,
-            handler: function (response: any) {
-                alert(response.razorpay_payment_id)
-                alert(response.razorpay_order_id)
-                alert(response.razorpay_signature)
+            handler: async function (response: any) {
+                await clearCartItems()
+                router.push(`/order/${response.razorpay_order_id}`)
             },
             prefill: {
                 name,
@@ -59,7 +84,7 @@ const PaymentButton = () => {
     }
 
     return (
-        <Button className='w-full' onClick={displayRazorpay} label='Proceed to pay' />
+        <Button className='w-full' isLoading={isLoading} onClick={displayRazorpay} label='Proceed to pay' />
     )
 }
 

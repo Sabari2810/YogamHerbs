@@ -20,6 +20,14 @@ export async function updateCartDetails(sessionId: string, productVariantId: num
     return result.recordset
 }
 
+export async function deleteCart(sessionId: string) {
+    await sql.connect(sqlConfig);
+    const request = new sql.Request()
+    request.input("session_id", sql.VarChar, sessionId)
+    const result = await request.execute("dbo.SP_DeleteCart")
+    return result.recordset
+}
+
 export async function getCartCount(sessionId: string) {
     const productQuantity = await prisma.yH_Cart.findMany({
         where: {

@@ -85,7 +85,7 @@ const ProductContainer: React.FC<IProps> = ({ product, imageUrl }) => {
         {/* RATING */}
         <ProductRating rating={3.5} />
       </div>
-      <Button className='text-xs md:text-lg' isLoading={isLoading} onClick={addToCart} label='Add to Cart' />
+      <Button className='text-xs md:text-sm' isLoading={isLoading} onClick={addToCart} label='Add to Cart' />
     </div>
   )
 }

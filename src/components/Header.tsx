@@ -85,7 +85,7 @@ const Header = () => {
                 <div className='flex items-center space-x-4'>
                     <Link href={"/cart"} className='relative'>
                         <AiOutlineShoppingCart size={25} />
-                        <p className='absolute bg-red-600 text-xs flex items-center justify-center
+                        <p className='absolute bg-[#E7700D] text-xs flex items-center justify-center
                       text-white p-1 rounded-full h-5 w-5 -top-2 -right-3'>{cartCount}</p>
                     </Link>
                     <div className='h-6 border border-slate-500'></div>
