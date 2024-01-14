@@ -3,7 +3,7 @@ import Button from '../Button'
 
 const CouponBox = () => {
     return (
-        <div className='flex flex-col w-full h-full items-start'>
+        <div className='flex flex-col px-6 md:px-0 w-full h-full items-start'>
             {/* DELIVERY DATE SECTION */}
             <p>Coupon</p>
             <div className='flex gap-2 w-full h-10 items-center'>

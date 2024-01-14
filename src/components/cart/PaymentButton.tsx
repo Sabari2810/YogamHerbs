@@ -84,7 +84,9 @@ const PaymentButton = () => {
     }
 
     return (
-        <Button className='w-full' isLoading={isLoading} onClick={displayRazorpay} label='Proceed to pay' />
+        <div className='px-6 md:px-0'>
+            <Button className='w-full' isLoading={isLoading} onClick={displayRazorpay} label='Proceed to pay' />
+        </div>
     )
 }
 
