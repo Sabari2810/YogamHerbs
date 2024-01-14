@@ -14,7 +14,7 @@ const OrderSummary = () => {
                 <div className='py-2 border-b-2 border-b-slate-200'>
                     {
                         cartItems.map((item) => (
-                            <div className='grid grid-cols-6 items-center justify-between'>
+                            <div key={item.Title} className='grid grid-cols-6 items-center justify-between'>
                                 <p className='col-span-4 w-48 md:w-32 text-lg md:text-sm truncate'>{item.Title}</p>
                                 <p className='col-span-1'>x{item.Quantity}</p>
                                 <p className='col-span-1'>{item.TotalPrice}</p>
